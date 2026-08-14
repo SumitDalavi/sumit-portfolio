@@ -124,7 +124,7 @@ const Projects = () => {
   const displayedProjects = showAllProjects ? projects : projects.slice(0, 4);
 
   return (
-    <section className="section animate-fade-in delay-200" style={{ background: 'hsla(var(--glass-bg), 0.3)' }}>
+    <section id="projects" className="section animate-fade-in delay-200" style={{ background: 'hsla(var(--glass-bg), 0.3)' }}>
       <div className="container">
         <h2 className="section-title">
           <span className="text-gradient">Featured</span> Infrastructure Projects
@@ -167,6 +167,15 @@ const Projects = () => {
               <>Show All {projects.length} Projects <ChevronDown size={16} /></>
             )}
           </button>
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
+          <a href="#experience" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer', display: 'inline-block' }} className="animate-bounce">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+              <span>View Experience & Certifications</span>
+              <ChevronDown size={24} />
+            </div>
+          </a>
         </div>
       </div>
     </section>
