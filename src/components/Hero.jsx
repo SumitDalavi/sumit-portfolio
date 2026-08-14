@@ -32,12 +32,12 @@ const Hero = () => {
         </div>
       </div>
       
-      <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', color: 'hsl(var(--text-secondary))' }} className="animate-bounce">
+      <a href="#skills" style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', color: 'hsl(var(--text-secondary))', cursor: 'pointer' }} className="animate-bounce">
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
           <span>Scroll to Explore</span>
           <ChevronDown size={24} />
         </div>
-      </div>
+      </a>
     </section>
   );
 };

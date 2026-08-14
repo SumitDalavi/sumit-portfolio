@@ -46,7 +46,7 @@ const Skills = () => {
   ];
 
   return (
-    <section className="section animate-fade-in delay-100">
+    <section id="skills" className="section animate-fade-in delay-100">
       <div className="container">
         <h2 className="section-title">
           <span className="text-gradient">Core Technical</span> Skills

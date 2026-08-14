@@ -1,14 +1,25 @@
-import React from 'react';
-import { Award, Briefcase, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Award, Briefcase, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 
 const Certifications = () => {
+  const [showAllCerts, setShowAllCerts] = useState(false);
+
   const certs = [
+    { title: "Career Essentials in GitHub", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/4f871718a297191512ab2f7d6ff99b7a1596f8a987d724b1db5578bb6a90a255" },
+    { title: "Career Essentials in GitHub Copilot", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/6edff49296042969651c38fe65cf0ec221b81500fef73b64de61de2a3f8ed793" },
+    { title: "Career Essentials in Cybersecurity", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/776729e64308169345a9f1137f606c668bf1388d490e971363156284f9fb6428" },
+    { title: "Career Essentials in Generative AI", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/0e378ce53aaee986999d65ed1bf3b7339c8e26c25c86c707c49057bbde99ae41" },
+    { title: "Career Essentials in System Administration", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/791392474590ae545334aa23c36f7015fd1dc5b8a0817c201c63e43ea0ee489d" },
+    { title: "Career Essentials in Software Development", issuer: "Microsoft & LinkedIn", date: "", url: "https://www.linkedin.com/learning/certificates/19e1540d08a311956d3859d54e0678c1e824a9db8aa25ee98b75c04119292e67" },
+    { title: "Docker Foundations Professional Certificate", issuer: "Docker", date: "", url: "https://www.linkedin.com/learning/certificates/86e9ede500c2b9820ae770e1ab6e83bb9059db2d449fd15808bc1e41222fcf2d" },
+    { title: "Atlassian Agile Project Management", issuer: "Atlassian", date: "", url: "https://www.linkedin.com/learning/certificates/d2645909f6a2426b9fd9464bb715222dbf1f67af9a18a5f96b6b527f37ab75a3" },
+    { title: "Responsible AI Foundations", issuer: "All Tech Is Human / UN", date: "", url: "https://www.linkedin.com/learning/certificates/2c392dda993cf9ef408788bb37bdab1899937d5db8d7a1584ddcd46019d03c9d" },
+    { title: "DevOps Certification Training", issuer: "Simplilearn", date: "", url: "https://www.linkedin.com/learning/certificates/a932b18b7b3c18a4a17b50c757c30ede8f2fb31d4794c6725da4bd1d8f028454" },
     { title: "Security Champion", issuer: "PTC Software", date: "2022–Present" },
-    { title: "Docker Foundations Professional Certificate", issuer: "Docker", date: "", url: "https://www.linkedin.com/learning/certificates/4f871718a297191512ab2f7d6ff99b7a1596f8a987d724b1db5578bb6a90a255" },
-    { title: "Atlassian Agile Project Management", issuer: "Atlassian", date: "", url: "https://www.linkedin.com/learning/certificates/6edff49296042969651c38fe65cf0ec221b81500fef73b64de61de2a3f8ed793" },
-    { title: "Responsible AI Foundations", issuer: "All Tech Is Human / UN", date: "", url: "https://www.linkedin.com/learning/certificates/776729e64308169345a9f1137f606c668bf1388d490e971363156284f9fb6428" },
     { title: "Diploma in Japanese (JLPT N4)", issuer: "SPPU, Pune", date: "2021" }
   ];
+
+  const displayedCerts = showAllCerts ? certs : certs.slice(0, 4);
 
   return (
     <section className="section animate-fade-in delay-300">
@@ -53,7 +64,7 @@ const Certifications = () => {
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
-              {certs.map((cert, idx) => (
+              {displayedCerts.map((cert, idx) => (
                 <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--glass-border)', paddingBottom: '1rem' }}>
                   <div>
                     <h4 style={{ fontSize: '1.1rem', marginBottom: '0.25rem' }}>
@@ -76,9 +87,21 @@ const Certifications = () => {
               ))}
             </div>
 
-            <div style={{ marginTop: 'auto', textAlign: 'center' }}>
-              <a href="https://in.linkedin.com/in/sumit-dalavi-762838129/details/certifications/" target="_blank" rel="noopener noreferrer" className="btn btn-outline" style={{ width: '100%', justifyContent: 'center' }}>
-                View All Certifications on LinkedIn <ExternalLink size={16} />
+            <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <button 
+                onClick={() => setShowAllCerts(!showAllCerts)}
+                className="btn btn-outline" 
+                style={{ width: '100%', justifyContent: 'center' }}
+              >
+                {showAllCerts ? (
+                  <>Show Less <ChevronUp size={16} /></>
+                ) : (
+                  <>Show All {certs.length} Certifications <ChevronDown size={16} /></>
+                )}
+              </button>
+              
+              <a href="https://in.linkedin.com/in/sumit-dalavi-762838129/details/certifications/" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                View Credentials on LinkedIn <ExternalLink size={16} />
               </a>
             </div>
           </div>
