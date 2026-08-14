@@ -127,7 +127,7 @@ const Projects = () => {
     <section id="projects" className="section animate-fade-in delay-200" style={{ background: 'hsla(var(--glass-bg), 0.3)' }}>
       <div className="container">
         <h2 className="section-title">
-          <span className="text-gradient">Featured</span> Infrastructure Projects
+          <span className="text-gradient">Featured</span> Projects
         </h2>
         
         <div className="grid grid-2">
