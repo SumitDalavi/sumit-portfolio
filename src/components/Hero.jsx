@@ -28,14 +28,6 @@ const Hero = () => {
               <Globe size={20} />
               LinkedIn
             </a>
-            <a href="#" className="btn btn-outline">
-              <FileText size={20} />
-              Resume
-            </a>
-            <a href="mailto:sumit.dalavi1994@gmail.com" className="btn btn-outline">
-              <Mail size={20} />
-              Contact
-            </a>
           </div>
         </div>
       </div>
