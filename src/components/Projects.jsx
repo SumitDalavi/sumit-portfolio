@@ -134,7 +134,11 @@ const Projects = () => {
           {displayedProjects.map((project, idx) => (
             <div key={idx} className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '1.25rem', lineHeight: '1.4' }}>{project.title}</h3>
+                <h3 style={{ fontSize: '1.25rem', lineHeight: '1.4' }}>
+                  <a href={`https://github.com/SumitDalavi/${project.repo}`} target="_blank" rel="noopener noreferrer" className="hover-accent" style={{ color: 'inherit', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    {project.title}
+                  </a>
+                </h3>
                 <a href={`https://github.com/SumitDalavi/${project.repo}`} target="_blank" rel="noopener noreferrer" className="hover-accent">
                   <ExternalLink size={20} />
                 </a>
