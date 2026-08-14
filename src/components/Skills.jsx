@@ -6,7 +6,7 @@ const Skills = () => {
     {
       title: "Cloud & Platform",
       icon: <Cloud size={24} className="text-gradient" />,
-      skills: ["Microsoft Azure (AKS)", "Azure Functions", "AWS (EC2, S3, Lambda)", "PostgreSQL", "Cosmos DB"]
+      skills: ["Azure (AKS, ACR, Functions)", "AWS (EC2, S3, SQS)", "Azure Key Vault", "PostgreSQL", "Cosmos DB"]
     },
     {
       title: "CI/CD & Release",
@@ -16,27 +16,27 @@ const Skills = () => {
     {
       title: "Security & DevSecOps",
       icon: <Shield size={24} className="text-gradient" />,
-      skills: ["SAST/DAST", "Checkmarx", "Wiz", "Veracode", "Threat Modeling", "Azure Key Vault"]
+      skills: ["SAST/DAST", "Checkmarx", "Wiz", "Veracode", "Invicti", "Black Duck", "Threat Modeling", "Secret Rotation"]
     },
     {
       title: "Infrastructure & GitOps",
       icon: <Network size={24} className="text-gradient" />,
-      skills: ["Kubernetes", "Docker", "Terraform", "Helm", "Rancher", "Chef", "Linux/RHEL"]
+      skills: ["Kubernetes", "Docker", "Terraform", "Helm", "Rancher", "GitOps", "Chef", "Linux/RHEL", "Bash/PowerShell"]
     },
     {
       title: "Backend & Testing",
       icon: <Cpu size={24} className="text-gradient" />,
-      skills: ["Node.js", "TypeScript", "Express.js", "REST APIs", "Kafka", "RabbitMQ", "MongoDB", "Redis"]
+      skills: ["Node.js", "TypeScript", "Express.js", "REST APIs", "Kafka", "RabbitMQ", "MongoDB", "Redis", "Mocha/Chai"]
     },
     {
       title: "SRE & Observability",
       icon: <Database size={24} className="text-gradient" />,
-      skills: ["Prometheus", "Grafana", "Datadog", "ELK Stack", "SLIs/SLOs", "Incident Troubleshooting"]
+      skills: ["Prometheus", "Grafana", "Datadog", "ELK Stack", "SLIs/SLOs", "Incident Response", "Platform Resilience"]
     },
     {
       title: "AI-Assisted Engineering",
       icon: <Bot size={24} className="text-gradient" />,
-      skills: ["GitHub Copilot", "Gemini", "LLMs", "Prompt Engineering", "Responsible AI"]
+      skills: ["GitHub Copilot", "Microsoft Copilot", "Gemini", "LLMs", "Prompt Engineering", "Responsible AI"]
     },
     {
       title: "Legacy Systems",
