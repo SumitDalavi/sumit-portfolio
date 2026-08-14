@@ -1,9 +1,9 @@
 import React from 'react';
-import { Code, Globe, Mail, FileText } from 'lucide-react';
+import { Code, Globe, Mail, FileText, ChevronDown } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <section className="section animate-fade-in" style={{ minHeight: '90vh', display: 'flex', alignItems: 'center' }}>
+    <section className="section animate-fade-in" style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', position: 'relative' }}>
       <div className="container">
         <div className="glass-panel" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
           <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>
@@ -29,6 +29,13 @@ const Hero = () => {
               LinkedIn
             </a>
           </div>
+        </div>
+      </div>
+      
+      <div style={{ position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)', color: 'hsl(var(--text-secondary))' }} className="animate-bounce">
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
+          <span>Scroll to Explore</span>
+          <ChevronDown size={24} />
         </div>
       </div>
     </section>

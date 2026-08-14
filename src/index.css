@@ -164,3 +164,12 @@ a:hover {
 @media (min-width: 1024px) {
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
 }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
