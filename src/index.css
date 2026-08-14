@@ -124,6 +124,17 @@ a:hover {
   background: hsla(var(--accent-primary), 0.1);
 }
 
+.btn-linkedin {
+  background: linear-gradient(to right, #0a66c2, #0077b5);
+  color: white;
+  box-shadow: 0 4px 15px rgba(10, 102, 194, 0.3);
+}
+
+.btn-linkedin:hover {
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.5);
+  transform: translateY(-2px);
+}
+
 /* Layout Utilities */
 .container {
   max-width: 1200px;

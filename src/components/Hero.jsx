@@ -24,7 +24,7 @@ const Hero = () => {
               <Code size={20} />
               GitHub
             </a>
-            <a href="https://in.linkedin.com/in/sumit-dalavi-762838129" target="_blank" rel="noopener noreferrer" className="btn btn-outline">
+            <a href="https://in.linkedin.com/in/sumit-dalavi-762838129" target="_blank" rel="noopener noreferrer" className="btn btn-linkedin">
               <Globe size={20} />
               LinkedIn
             </a>

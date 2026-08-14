@@ -119,7 +119,7 @@ const Certifications = () => {
                 )}
               </button>
               
-              <a href="https://in.linkedin.com/in/sumit-dalavi-762838129/details/certifications/" target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+              <a href="https://in.linkedin.com/in/sumit-dalavi-762838129/details/certifications/" target="_blank" rel="noopener noreferrer" className="btn btn-linkedin" style={{ width: '100%', justifyContent: 'center' }}>
                 View Credentials on LinkedIn <ExternalLink size={16} />
               </a>
             </div>
