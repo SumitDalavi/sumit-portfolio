@@ -132,7 +132,7 @@ const Projects = () => {
         
         <div className="grid grid-2">
           {displayedProjects.map((project, idx) => (
-            <div key={idx} className="project-card">
+            <div key={idx} className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                 <h3 style={{ fontSize: '1.25rem', lineHeight: '1.4' }}>{project.title}</h3>
                 <a href={`https://github.com/SumitDalavi/${project.repo}`} target="_blank" rel="noopener noreferrer" className="hover-accent">
