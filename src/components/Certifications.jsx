@@ -39,7 +39,7 @@ const Certifications = () => {
           <span className="text-gradient">Experience</span> & Professional Development
         </h2>
         
-        <div className="grid grid-2">
+        <div className="grid grid-2" style={{ alignItems: 'flex-start' }}>
           {/* Experience & Impact Summary */}
           <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
@@ -79,7 +79,7 @@ const Certifications = () => {
           <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
               <Award size={28} className="text-gradient" />
-              <h3 style={{ fontSize: '1.75rem' }}>Certifications</h3>
+              <h3 style={{ fontSize: '1.75rem' }}>Certifications & Training</h3>
             </div>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
