@@ -6,10 +6,22 @@ const Projects = () => {
 
   const projects = [
     {
+      title: "Secret Sprawl Remediation Bot",
+      repo: "secret-sprawl-remediation-bot",
+      description: "Automated bot for identifying, triaging, and remediating hardcoded secrets across thousands of repositories using GitHub Advanced Security and Azure Key Vault.",
+      tags: ["Python", "DevSecOps", "Security"]
+    },
+    {
       title: "AI DevSecOps Agent",
       repo: "ai-devsecops-agent-mcp",
       description: "An autonomous agent leveraging Model Context Protocol (MCP) for automated vulnerability remediation and infrastructure-as-code security scanning.",
       tags: ["Python", "MCP", "LLMs", "DevSecOps"]
+    },
+    {
+      title: "Production-Grade Internal Developer Platform (IDP)",
+      repo: "internal-developer-platform-poc",
+      description: "A comprehensive IDP abstracting Kubernetes complexity, enabling developers to self-serve infrastructure and deploy applications frictionlessly.",
+      tags: ["Backstage", "Crossplane", "Platform Engineering"]
     },
     {
       title: "Kubernetes Golden Path Provisioner",
@@ -18,16 +30,46 @@ const Projects = () => {
       tags: ["Go", "Kubernetes Operator", "Platform Engineering"]
     },
     {
+      title: "Golden Path CLI",
+      repo: "golden-path-cli",
+      description: "Developer CLI tool for scaffolding secure, compliant microservices with built-in CI/CD pipelines, IAM roles, and observability configurations.",
+      tags: ["Go", "CLI", "Developer Experience"]
+    },
+    {
       title: "Supply Chain Security Pipeline",
       repo: "supply-chain-security-pipeline",
       description: "End-to-end SLSA-compliant CI/CD pipeline featuring container signing (Cosign), SBOM generation (Syft), and vulnerability attestation.",
       tags: ["GitHub Actions", "Sigstore", "Docker"]
     },
     {
-      title: "Production-Grade Internal Developer Platform (IDP)",
-      repo: "internal-developer-platform-poc",
-      description: "A comprehensive IDP abstracting Kubernetes complexity, enabling developers to self-serve infrastructure and deploy applications frictionlessly.",
-      tags: ["Backstage", "Crossplane", "Platform Engineering"]
+      title: "K8s Admission Webhook From Scratch",
+      repo: "k8s-admission-webhook-from-scratch",
+      description: "Custom Kubernetes mutating and validating admission webhooks built from scratch to enforce security policies and inject sidecars.",
+      tags: ["Go", "Kubernetes", "Security"]
+    },
+    {
+      title: "Service Mesh Security Lab",
+      repo: "service-mesh-security-lab",
+      description: "Hands-on lab demonstrating advanced Istio service mesh security patterns including mTLS, authorization policies, and egress gateways.",
+      tags: ["Istio", "Service Mesh", "Security"]
+    },
+    {
+      title: "NHI Agent Access Governance",
+      repo: "nhi-agent-access-governance",
+      description: "Framework for governing and auditing Non-Human Identity (NHI) access, implementing least privilege for service accounts and API keys.",
+      tags: ["IAM", "Security", "Governance"]
+    },
+    {
+      title: "CSPM Noise Reduction Agent",
+      repo: "cspm-noise-reduction-agent",
+      description: "Intelligent agent that analyzes and filters Cloud Security Posture Management (CSPM) alerts to reduce alert fatigue and prioritize true risks.",
+      tags: ["Python", "Security", "Automation"]
+    },
+    {
+      title: "OPA Threat Modeling Library",
+      repo: "opa-threat-modeling-library",
+      description: "Open Policy Agent (OPA) library for codifying threat models and automatically evaluating architecture diagrams against security policies.",
+      tags: ["OPA", "Rego", "Threat Modeling"]
     },
     {
       title: "K8s Gateway API Platform",
