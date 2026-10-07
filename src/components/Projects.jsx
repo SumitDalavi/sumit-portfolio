@@ -1,10 +1,40 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 
 const Projects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
 
   const projects = [
+    {
+      title: "Durable Incident Agent",
+      repo: "durable-incident-agent",
+      description: "Autonomous incident response agent with durable execution workflows, orchestrating complex remediation steps reliably across distributed systems with automatic retries and state management.",
+      tags: ["Python", "Agents", "SRE"]
+    },
+    {
+      title: "A2A Incident Mesh",
+      repo: "a2a-incident-mesh",
+      description: "Agent-to-Agent communication mesh enabling collaborative incident response, where specialised AI agents autonomously triage, debug, and resolve complex system outages in real-time.",
+      tags: ["TypeScript", "Multi-Agent", "SRE"]
+    },
+    {
+      title: "Voice Incident Commander",
+      repo: "voice-incident-commander",
+      description: "Voice-driven incident command interface allowing on-call engineers to orchestrate mitigation workflows, query telemetry, and execute runbooks hands-free during critical outages.",
+      tags: ["Python", "Voice AI", "Platform Engineering"]
+    },
+    {
+      title: "Agent Sandbox Platform",
+      repo: "agent-sandbox-platform",
+      description: "Secure, isolated execution environment for evaluating AI agents, enforcing strict safety boundaries, network policies, and resource constraints during autonomous operations.",
+      tags: ["Go", "Security", "AI"]
+    },
+    {
+      title: "Inference Performance Lab",
+      repo: "inference-performance-lab",
+      description: "Benchmarking and optimisation laboratory for LLM inference, profiling latency, throughput, and token generation costs across various models and deployment configurations.",
+      tags: ["Python", "LLMOps", "Performance"]
+    },
     {
       title: "K8s Golden Path Provisioner",
       repo: "k8s-golden-path-provisioner",
