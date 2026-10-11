@@ -103,9 +103,9 @@ export const caseStudies = [
     tier: "Tier 1: Flagship Architectural Study",
     category: "AI Infrastructure",
     categoryId: "ai",
-    executiveSummary: "Secure, containerized runtime sandbox orchestrator built with TypeScript/Node.js and Dockerode, enforcing ephemeral container isolation, strict timeout budgets, and deterministic cleanup boundaries for untrusted code execution.",
+    executiveSummary: "Containerized runtime sandbox orchestrator built with TypeScript/Node.js and Dockerode, enforcing ephemeral container isolation, execution timeout deadlines, and deterministic cleanup boundaries for untrusted code execution.",
     problem: "Executing untrusted AI-generated code or third-party agent tools directly on host systems risks unauthorized network egress, local resource exhaustion, and lingering zombie processes.",
-    architecture: "TypeScript/Node.js supervisor daemon managing ephemeral Docker containers via Dockerode with dropped Linux capabilities, non-root user execution, strict memory/CPU quota ceilings, and synchronous teardown handlers.",
+    architecture: "TypeScript/Node.js supervisor daemon managing ephemeral Docker container lifecycles via Dockerode, enforcing execution timeouts, bounded stdout/stderr stream collection, and synchronous container destruction.",
     diagram: `+-------------------------------------------------------------------------+
 |                       Agent Invocation Request                          |
 |             (Code Payload, Resource Quota, Tokenized Policy)            |
@@ -114,23 +114,23 @@ export const caseStudies = [
                                      v
 +------------------------------------+------------------------------------+
 |         Sandbox Supervisor Daemon (TypeScript / Dockerode)              |
-|   - Strips Linux Capabilities (CapDrop: ALL)                            |
-|   - Enforces Non-Root Execution (User: 1000:1000)                       |
-|   - Sets Memory Ceiling (Memory limit) & CPU Throttling (NanoCPUs)      |
-|   - Mounts Ephemeral Read-Only RootFS with Temporary Scratch Volume     |
+|   - Manages Ephemeral Docker Container Lifecycles                       |
+|   - Enforces Process Execution Timeouts & Deadline Clocks               |
+|   - Collects stdout/stderr with Strict Output Buffer Caps               |
+|   - Runs Execution within Scoped Non-Root Ephemeral Sandboxes           |
 +------------------------------------+------------------------------------+
                                      |
                                      v
 +------------------------------------+------------------------------------+
 |                  Execution & Deterministic Cleanup                      |
-|   - Streams stdout/stderr with buffer caps                              |
+|   - Streams bounded process output logs                                 |
 |   - Synchronous container teardown propagating errors if lingering      |
 +-------------------------------------------------------------------------+`,
     decisions: [
       {
-        title: "Least-Privilege Container Configuration",
-        decision: "Enforced non-root user IDs, dropped all Linux capabilities, and configured read-only root filesystems for container workers.",
-        rationale: "Mitigates privilege escalation risks and restricts modifications to temporary scratch volumes."
+        title: "Ephemeral Container Lifecycle & Timeout Enforcement",
+        decision: "Orchestrated isolated container instances per task with strict execution timeout deadlines and output stream bounds.",
+        rationale: "Prevents runaway processes, unconstrained execution loops, and orphaned containers during untrusted agent tool runs."
       },
       {
         title: "Synchronous Cleanup Failure Propagation",
@@ -140,7 +140,7 @@ export const caseStudies = [
     ],
     remediation: "Corrected container launcher parity across environments, fixed cleanup failure propagation when containers timed out, and hardened execution schema validation.",
     results: "Successfully executes untrusted code payloads in isolated containers with enforced execution timeouts and verified container destruction on exit.",
-    limitations: "Container-based isolation implemented via Dockerode; advanced kernel sandboxing (such as gVisor runsc runtime or Firecracker microVMs) was identified as a future hardening path and intentionally deferred.",
+    limitations: "Container-based isolation implemented via Dockerode; kernel-level isolation (such as gVisor runsc runtime or Firecracker microVMs), dropped capabilities, and read-only root filesystems represent architectural hardening boundaries identified for future extensions.",
     tags: ["TypeScript", "Node.js", "Dockerode", "Container Security", "Sandboxing", "AI Safety"],
     sources: [
       { label: "Source Code Repository", url: "https://github.com/SumitDalavi/agent-sandbox-platform" },
@@ -184,14 +184,14 @@ export const caseStudies = [
         rationale: "Provides total transparency over AdmissionReview v1 JSON serialization, RFC 6902 JSONPatch generation, and minimal binary footprint."
       },
       {
-        title: "Explicit Fail-Closed vs. Fail-Open Strategy",
-        decision: "Configured FailurePolicy: Fail for security validation webhooks with multi-replica PodDisruptionBudgets and readiness checks.",
-        rationale: "Ensures critical admission security policies cannot be bypassed during transient webhook pod redeployments."
+        title: "Fail-Closed Security Posture Evaluation",
+        decision: "Configured FailurePolicy: Fail for security validation webhooks to enforce strict admission security, while documenting the operational availability tradeoffs of fail-closed webhooks.",
+        rationale: "Ensures critical admission security policies cannot be bypassed if the webhook is unreachable, treating security rejection as the priority over permissive fail-open bypass."
       }
     ],
     remediation: "Configured TLS server certificate provisioning for API server communication, resolved JSON patch RFC 6902 ordering issues on nested container arrays, and verified non-root pod enforcement.",
     results: "Validated mutating and validating webhook logic against Kubernetes API server AdmissionReview contracts, correctly enforcing label requirements and disallowing unprivileged root containers across automated integration tests.",
-    limitations: "Uses static TLS certificate mounting (manual renewal); automated in-cluster rotation via cert-manager is left to external operators. Focuses on admission-time contracts rather than runtime kernel enforcement.",
+    limitations: "Uses static TLS certificate mounting (manual renewal); automated in-cluster rotation via cert-manager and production high-availability configurations (such as multi-replica PodDisruptionBudgets and horizontal scaling) are documented as operational deployment requirements rather than in-tree primitives. Focuses on admission-time contracts rather than runtime kernel enforcement.",
     tags: ["Go", "Kubernetes", "Admission Webhook", "TLS", "JSONPatch", "DevSecOps"],
     sources: [
       { label: "Source Code Repository", url: "https://github.com/SumitDalavi/k8s-admission-webhook-from-scratch" },
@@ -209,7 +209,7 @@ export const caseStudies = [
     categoryId: "platform",
     executiveSummary: "Self-service Kubernetes operator provisioning standardized, isolated namespaces with pre-configured RBAC, default-deny NetworkPolicies, and resource quotas from a single developer CRD.",
     problem: "Development teams often rely on manual ticketing for new Kubernetes namespaces, resulting in inconsistent security configurations, missing network isolation, and unbounded cloud resource consumption.",
-    architecture: "A Kubernetes Operator built with Kubebuilder reconciling custom PlatformService and GoldenPath CRDs into hardened namespace environments with automated owner RBAC and resource quotas.",
+    architecture: "A Kubernetes Operator built with Kubebuilder that evolved from an initial PlatformService prototype into a dedicated GoldenPath CRD, reconciling tenant declarations into isolated namespace environments with automated owner RBAC, default-deny NetworkPolicies, and resource quotas.",
     diagram: `[Developer CRD: GoldenPath] ---> [Kubernetes Controller Reconciler]
                                          |
      +-------------------+---------------+-------------------+
@@ -221,12 +221,12 @@ export const caseStudies = [
 [Role & RoleBinding]  [Scoped ServiceAccount]        [Prometheus ServiceMonitor]`,
     decisions: [
       {
-        title: "Unstructured Reconciliation Strategy",
-        decision: "Utilized unstructured client reconciliation for underlying Kubernetes primitives during schema evolution.",
-        rationale: "Maintained forward compatibility when moving between Kubernetes 1.28 and 1.30 API versions without operator recompilation."
+        title: "CRD Schema Evolution from PlatformService to GoldenPath",
+        decision: "Migrated custom resource definitions from an initial PlatformService prototype into a dedicated GoldenPath CRD, leveraging unstructured client reconciliation during the schema evolution.",
+        rationale: "Separated higher-level application workload declarations from foundational namespace scaffolding, ensuring clean schema versioning across Kubernetes cluster upgrades."
       }
     ],
-    remediation: "Resolved race condition between namespace creation and NetworkPolicy attachment; refined CRD validation openAPIV3 schemas.",
+    remediation: "Refined CRD validation openAPIV3 schemas during the PlatformService to GoldenPath migration; resolved race condition between namespace provisioning and NetworkPolicy attachment.",
     results: "Automated end-to-end namespace scaffolding from a single CRD, establishing consistent default-deny network isolation, RBAC rolebindings, and resource quotas without manual ticket handoffs.",
     limitations: "Manages Kubernetes-native resources; external cloud resources (databases, queues) rely on external Crossplane/Terraform hooks.",
     tags: ["Go", "Kubernetes Operator", "Kubebuilder", "Platform Engineering", "RBAC"],
@@ -283,10 +283,10 @@ export const caseStudies = [
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
     categoryId: "ai",
-    executiveSummary: "Benchmarking and profiling laboratory for LLM inference serving, characterizing streaming latency, Time-to-First-Token (TTFT), token generation rates, and concurrency bottlenecks.",
-    problem: "Evaluating LLM serving engines without standardized arrival rate models leads to unpredictable production latency spikes and misconfigured autoscaling thresholds.",
-    architecture: "A Python-based benchmarking suite implementing Poisson and bursty traffic arrival models, real-time token streaming parsers, and statistical p50/p95/p99 latency calculations.",
-    diagram: `[Traffic Generator] ---> [Poisson / Bursty Arrival Model]
+    executiveSummary: "Benchmarking and profiling suite for LLM inference serving, measuring streaming response latencies, Time-to-First-Token (TTFT), and token generation throughput across configurable concurrent client workloads.",
+    problem: "Evaluating LLM serving engines without streaming-aware measurement leads to skewed latency averages that conceal initial token wait times and concurrency bottlenecks.",
+    architecture: "A Python benchmarking harness featuring streaming response chunk parsers, concurrent client workload execution, and statistical percentile calculations (p50/p95/p99) with finite-value outlier guards.",
+    diagram: `[Benchmark Harness] ---> [Configurable Concurrent Workload]
                                   |
                                   v
                     [LLM Inference Server / vLLM]
@@ -300,14 +300,14 @@ export const caseStudies = [
 [Time-to-First-Token (TTFT)]  [Inter-Token Latency (ITL)]  [Throughput (Tokens/sec)]`,
     decisions: [
       {
-        title: "Finite-Value Guards on Latency Calculations",
-        decision: "Implemented strict finite-value guards and outlier filtering on streaming latency calculations.",
-        rationale: "Prevented statistical distortion when network timeouts or model warmups emitted single-token outliers."
+        title: "Finite-Value Guards on Streaming Latency Calculations",
+        decision: "Implemented strict finite-value validation guards and outlier filtering within the streaming response parser calculations.",
+        rationale: "Prevents statistical distortion from dropped packets, incomplete chunks, or model warmup delays during streaming token aggregation."
       }
     ],
-    remediation: "Fixed single-token response handling in streaming parser; calibrated client concurrency to avoid client-side socket saturation.",
-    results: "Quantified TTFT and tokens/sec across concurrency tiers (1-64 concurrent clients), identifying saturation inflection points with high reproducibility.",
-    limitations: "Focuses on software serving metrics and client-side profiling; hardware thermal throttling requires bare-metal GPU telemetry.",
+    remediation: "Fixed single-token response chunk handling in the streaming parser; calibrated client connection pools to avoid client-side socket exhaustion.",
+    results: "Successfully characterized TTFT and token generation throughput across concurrent request workloads, producing reproducible latency distributions and identifying server saturation thresholds.",
+    limitations: "Measures application-level serving metrics and client-perceived streaming timings; hardware-level GPU telemetry requires dedicated bare-metal profiling tools.",
     tags: ["Python", "LLM Inference", "Benchmarking", "vLLM", "Performance Engineering"],
     sources: [
       { label: "Source Code Repository", url: "https://github.com/SumitDalavi/inference-performance-lab" },
@@ -323,28 +323,28 @@ export const caseStudies = [
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "Security & DevSecOps",
     categoryId: "security",
-    executiveSummary: "Kubernetes operator automating scheduled secret generation, Secret resource reconciliation, and dependent workload rolling restarts with dual-credential overlap modeling.",
-    problem: "Manual credential rotation is error-prone and frequently causes service outages when downstream pods restart before newly generated database secrets become valid.",
-    architecture: "Custom Kubernetes controller managing SecretRotation CRDs that interface with backend secret stores, maintain previous and next credential versions during rotation, and trigger orchestrated rollout restarts.",
+    executiveSummary: "Kubernetes operator automating scheduled secret generation, Secret resource reconciliation, and dependent workload rolling restarts, comparing native Kubernetes secret generation against external HashiCorp Vault backends.",
+    problem: "Manual credential rotation across Kubernetes clusters is error-prone and uncoordinated, leading to stale secrets and service disruption if workload rollouts are not synchronized with secret updates.",
+    architecture: "Custom Kubernetes controller reconciling SecretRotation CRDs to generate updated Secret resources (evaluating native generation versus external Vault integration) and trigger rolling rollout restarts on dependent Deployments.",
     diagram: `[SecretRotation CRD] ---> [Rotation Controller]
                                     |
             +-----------------------+-----------------------+
             |                                               |
             v                                               v
-[Generate New Secret V2]                      [Maintain Dual-Credential Grace Window]
+[Evaluate Generation: Native / Vault]         [Update Target K8s Secret Resource]
             |                                               |
             v                                               v
-[Update K8s Secret Resource]                   [Trigger Rolling Restart of Dependent Pods]`,
+[Reconcile Target Secret Data]                 [Trigger Rolling Restart of Dependent Pods]`,
     decisions: [
       {
-        title: "Dual-Credential Grace Window Modeling",
-        decision: "Enforced dual-credential validity periods where both V1 and V2 passwords remain accepted by the backend store during rolling updates.",
-        rationale: "Eliminates connection downtime while old pods are draining and new pods are starting."
+        title: "Native Secret Generation vs. External Vault Architecture",
+        decision: "Implemented native Kubernetes Secret generation within the operator while evaluating external Vault backends, deliberately isolating the operator boundary to Kubernetes Secret lifecycle and Deployment rollouts.",
+        rationale: "Establishes a clean architectural boundary where the operator manages cluster-level resource reconciliation, treating application-level connection draining and dynamic database credential revocation as separate consumer-side concerns."
       }
     ],
-    remediation: "Defined explicit boundary separation between operator secret reconciliation and downstream client connection draining; managed versioned secret keys.",
+    remediation: "Defined explicit boundary separation between operator Secret reconciliation and downstream client connection draining; evaluated native generation versus external Vault integration patterns.",
     results: "Successfully reconciled rotating credentials and triggered rolling pod restarts across automated controller integration test scenarios.",
-    limitations: "Operator manages Kubernetes Secret lifecycle and rolling deployment triggers; downstream application connection refreshing and database-level credential deprecation remain independent client-side boundaries.",
+    limitations: "Operator manages Kubernetes Secret updates and workload rollout triggers; downstream application in-memory connection refreshing and upstream database user management are intentionally decoupled as external operational boundaries.",
     tags: ["Go", "Kubernetes Operator", "Security", "Secret Management", "DevSecOps"],
     sources: [
       { label: "Source Code Repository", url: "https://github.com/SumitDalavi/k8s-secret-rotation-operator" },
@@ -405,20 +405,20 @@ export const caseStudies = [
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
     categoryId: "ai",
-    executiveSummary: "Control plane proxy orchestrating model routing, token rate-limiting, policy guardrails, and graceful multi-provider fallbacks across distributed AI services.",
-    problem: "Uncoordinated direct API calls to commercial LLMs create vendor lock-in, unmonitored security leakage, and system outages when upstream providers degrade.",
-    architecture: "Unified proxy gateway implementing semantic routing rules, token consumption quotas, PII redaction filters, and automated circuit breakers.",
+    executiveSummary: "Control plane proxy orchestrating AI request routing, provider failover simulation, and multi-endpoint mediation supporting both mock/stub and live integration modes.",
+    problem: "Directly coupling client applications to single AI provider APIs creates brittle architectures, unpredictable outage behavior, and testing complexity during upstream provider disruptions.",
+    architecture: "TypeScript proxy gateway mediating requests across configured AI model endpoints, featuring dual execution modes (deterministic stub simulation for testing versus live upstream forwarding) and error-triggered failover dispatch.",
     diagram: `[Client Application] ---> [AI Control Plane Gateway]
                                     |
             +-----------------------+-----------------------+
             |                       |                       |
             v                       v                       v
-[PII Redaction Guardrail]   [Token Quota & Rate Limit]   [Cost / Complexity Router]
+[Execution Mode: Stub/Live] [Request Validation & Auth]  [Model Router (Fast vs Primary)]
             |                       |                       |
             +-----------------------+-----------------------+
                                     |
                                     v
-                     [Provider Health Circuit Breaker]
+                     [Error-Triggered Failover Handler]
                                     |
                  +------------------+------------------+
                  |                                     |
@@ -426,14 +426,14 @@ export const caseStudies = [
        [Primary Model (Fast)]                [Fallback Model (Backup)]`,
     decisions: [
       {
-        title: "Circuit-Breaker Pattern for Upstream Models",
-        decision: "Implemented automated circuit breaking with fallback to self-hosted/alternative models upon repeated upstream 5xx errors.",
-        rationale: "Maintains application availability even during provider degradation."
+        title: "Stub Simulation vs. Live Endpoint Execution Modes",
+        decision: "Engineered dual execution modes: a deterministic stub provider mode for local testing and integration fixtures, alongside live endpoint forwarding with automated failover routing on upstream HTTP errors.",
+        rationale: "Enables robust, reproducible end-to-end integration testing and predictable fallback behavior without incurring API billing or external network flakiness."
       }
     ],
-    remediation: "Clarified stub provider modes vs live endpoints; verified memory efficiency during high-throughput token buffering.",
-    results: "Successfully routes LLM requests with policy validation and validated automated fallback failover to backup model endpoints under simulated upstream HTTP error conditions.",
-    limitations: "Focuses on routing and control policies; does not host raw model weights directly.",
+    remediation: "Separated mock/stub response fixtures from live network dispatch pipelines and hardened error classification for endpoint failover.",
+    results: "Validated seamless request routing and automated failover dispatch across mock and live integration test scenarios, confirming correct fallback routing when primary endpoints return errors.",
+    limitations: "Focuses on request routing, stub simulation, and error-handling failover; does not implement specialized in-flight token parsing or self-hosted model inference runtimes.",
     tags: ["TypeScript", "API Gateway", "LLMOps", "Resilience", "Policy Enforcement"],
     sources: [
       { label: "Source Code Repository", url: "https://github.com/SumitDalavi/ai-control-plane-demo" },
