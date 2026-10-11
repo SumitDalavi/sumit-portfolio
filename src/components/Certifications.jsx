@@ -6,6 +6,13 @@ const Certifications = () => {
   const [showAllImpact, setShowAllImpact] = useState(false);
 
   const certs = [
+    { title: "DevOps Professional Certificate", issuer: "PagerDuty", url: "https://www.linkedin.com/learning/certificates/4060469d9f5484c4f4a294d9afa40c467132fdcca9270b9f649dbccc5810d4c6" },
+    { title: "Ubuntu Linux Professional Certificate", issuer: "Canonical", url: "https://www.linkedin.com/learning/certificates/6ecea536d353db15110ec08cb247ebfc2ff7d9878523a604aa49c0e1dc4b6d06" },
+    { title: "Career Essentials in Sustainable Tech", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/5b91e37bb7e50559cc4e19436b130b4b331e970c42efc8efa25eb3c4c1872c93" },
+    { title: "Microsoft Azure AI Essentials Professional Certificate", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/14eca8904c6842bc9815bd436823f8a19186441016bcdb27b2187b513035b133" },
+    { title: "Microsoft 365 Copilot Essentials Professional Certificate", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/ee2bb658c1780c432c54165cd51b30556286caf7374bf49d2eedd2522db1d2d0" },
+    { title: "Microsoft Azure Essentials Professional Certificate", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/2c6b9337ae638b9128edeefbcd6a6bdd19dbdc87f72883df53f36d0c7a8471a3" },
+    { title: "Microsoft Security Essentials Professional Certificate", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/5f7fa917defe005ae440fc27a14f2e21d18a7ee3eb5f221a46f22d3ba12cfc4f" },
     { title: "Career Essentials in Generative AI", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/4f871718a297191512ab2f7d6ff99b7a1596f8a987d724b1db5578bb6a90a255" },
     { title: "Career Essentials in GitHub Copilot Professional Certificate", issuer: "Github", url: "https://www.linkedin.com/learning/certificates/6edff49296042969651c38fe65cf0ec221b81500fef73b64de61de2a3f8ed793" },
     { title: "Career Essentials in Cybersecurity", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/776729e64308169345a9f1137f606c668bf1388d490e971363156284f9fb6428" },
