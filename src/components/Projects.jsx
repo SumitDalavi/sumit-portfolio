@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, Sparkles, Layers, Shield, Cpu, ArrowRight } from 'lucide-react';
+import { caseStudies } from '../data/caseStudies';
+import CaseStudyModal from './CaseStudyModal';
 
 const Projects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [selectedCaseStudy, setSelectedCaseStudy] = useState(null);
+  const [viewMode, setViewMode] = useState('case-studies'); // 'case-studies' | 'all-projects'
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const projects = [
     {
@@ -427,62 +433,324 @@ const Projects = () => {
     }
   ];
 
-  const displayedProjects = showAllProjects ? projects : projects.slice(0, 4);
+  const caseStudyMap = useMemo(() => new Map(caseStudies.map(cs => [cs.repo, cs])), []);
+
+  const categories = useMemo(() => [
+    'All',
+    'Platform Engineering',
+    'Reliability & SRE',
+    'AI Infrastructure',
+    'Kubernetes Internals',
+    'Security & DevSecOps',
+    'Cloud & GitOps'
+  ], []);
+
+  // Filtered 19 Ranked Case Studies
+  const filteredCaseStudies = useMemo(() => {
+    return caseStudies.filter(cs => {
+      const matchesCategory = activeCategory === 'All' || 
+        cs.category.toLowerCase().includes(activeCategory.toLowerCase()) || 
+        activeCategory.toLowerCase().includes(cs.category.toLowerCase());
+      const query = searchQuery.toLowerCase().trim();
+      const matchesQuery = !query || 
+        cs.title.toLowerCase().includes(query) || 
+        cs.executiveSummary.toLowerCase().includes(query) || 
+        cs.problem.toLowerCase().includes(query) ||
+        cs.tags.some(t => t.toLowerCase().includes(query));
+      return matchesCategory && matchesQuery;
+    });
+  }, [activeCategory, searchQuery]);
+
+  // Filtered 70 All Projects
+  const filteredAllProjects = useMemo(() => {
+    return projects.filter(p => {
+      const cs = caseStudyMap.get(p.repo);
+      const matchesCategory = activeCategory === 'All' || 
+        p.tags.some(t => t.toLowerCase().includes(activeCategory.toLowerCase())) ||
+        (cs && cs.category.toLowerCase().includes(activeCategory.toLowerCase()));
+      const query = searchQuery.toLowerCase().trim();
+      const matchesQuery = !query ||
+        p.title.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.tags.some(t => t.toLowerCase().includes(query));
+      return matchesCategory && matchesQuery;
+    });
+  }, [projects, caseStudyMap, activeCategory, searchQuery]);
+
+  const displayedCaseStudies = showAllProjects ? filteredCaseStudies : filteredCaseStudies.slice(0, 6);
+  const displayedProjects = showAllProjects ? filteredAllProjects : filteredAllProjects.slice(0, 8);
 
   return (
     <section id="projects" className="section animate-fade-in delay-200" style={{ background: 'hsla(var(--glass-bg), 0.3)' }}>
       <div className="container">
-        <h2 className="section-title">
-          <span className="text-gradient">Featured</span> Projects
-        </h2>
-        
-        <div className="grid grid-2">
-          {displayedProjects.map((project, idx) => (
-            <div key={idx} className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                <h3 style={{ fontSize: '1.25rem', lineHeight: '1.4' }}>
-                  <a href={`https://github.com/SumitDalavi/${project.repo}`} target="_blank" rel="noopener noreferrer" className="hover-accent" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    {project.title}
-                  </a>
-                </h3>
-                <a href={`https://github.com/SumitDalavi/${project.repo}`} target="_blank" rel="noopener noreferrer" className="hover-accent">
-                  <ExternalLink size={20} />
-                </a>
-              </div>
-              
-              <p style={{ color: 'hsl(var(--text-secondary))', marginBottom: '1.5rem', lineHeight: '1.6', flexGrow: 1 }}>
-                {project.description}
-              </p>
-              
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                {project.tags.map((tag, tIdx) => (
-                  <span key={tIdx} style={{ fontSize: '0.85rem', color: 'hsl(var(--accent-primary))', background: 'hsla(var(--accent-primary), 0.1)', padding: '0.2rem 0.6rem', borderRadius: '4px' }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <h2 className="section-title" style={{ marginBottom: '0.75rem' }}>
+            <span className="text-gradient">Engineering Portfolio</span> & Systems Architecture
+          </h2>
+          <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '750px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.6' }}>
+            Ground-truth systems engineering spanning 10 years of Kubernetes internals, DevSecOps, SRE resilience, and autonomous AI infrastructure.
+          </p>
         </div>
 
-        <div style={{ marginTop: '3rem', textAlign: 'center' }}>
-          <button 
-            onClick={() => setShowAllProjects(!showAllProjects)}
-            className="btn btn-outline"
-            style={{ minWidth: '250px', justifyContent: 'center' }}
+        {/* Primary View Switcher: Ranked Case Studies vs All 70 Projects */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => { setViewMode('case-studies'); setShowAllProjects(false); }}
+            className={`btn ${viewMode === 'case-studies' ? 'btn-primary' : 'btn-outline'}`}
+            style={{ borderRadius: '100px', padding: '0.65rem 1.75rem', fontSize: '0.95rem' }}
           >
-            {showAllProjects ? (
-              <>Show Less <ChevronUp size={16} /></>
-            ) : (
-              <>Show All {projects.length} Projects <ChevronDown size={16} /></>
-            )}
+            <Sparkles size={18} />
+            Ranked Case Studies ({caseStudies.length})
+          </button>
+          <button
+            onClick={() => { setViewMode('all-projects'); setShowAllProjects(false); }}
+            className={`btn ${viewMode === 'all-projects' ? 'btn-primary' : 'btn-outline'}`}
+            style={{ borderRadius: '100px', padding: '0.65rem 1.75rem', fontSize: '0.95rem' }}
+          >
+            <Layers size={18} />
+            Full Repository Catalog ({projects.length})
           </button>
         </div>
 
+        {/* Search Bar */}
+        <div className="search-bar-container">
+          <Search size={18} className="search-icon" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={viewMode === 'case-studies' ? "Search 19 ranked case studies by architecture, tag, or topic..." : "Search all 70 repositories..."}
+            className="search-input"
+          />
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="filter-tabs">
+          {categories.map((cat, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveCategory(cat)}
+              className={`filter-tab-btn ${activeCategory === cat ? 'active' : ''}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* MODE 1: RANKED CASE STUDIES (19) */}
+        {viewMode === 'case-studies' && (
+          <>
+            <div className="grid grid-2">
+              {displayedCaseStudies.map((cs) => (
+                <div 
+                  key={cs.id} 
+                  className="glass-panel" 
+                  style={{ 
+                    padding: '2rem', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    position: 'relative',
+                    border: cs.rank <= 4 ? '1px solid hsla(var(--accent-primary), 0.4)' : '1px solid var(--glass-border)'
+                  }}
+                >
+                  {/* Top Badges */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span className="badge-rank">
+                        Rank #{cs.rank}
+                      </span>
+                      <span className="badge-tier" style={{ fontSize: '0.7rem' }}>
+                        {cs.tier.split(':')[0]}
+                      </span>
+                    </div>
+                    <span className="badge-category">
+                      {cs.category}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.35rem', lineHeight: '1.3', marginBottom: '0.75rem' }}>
+                    <button 
+                      onClick={() => setSelectedCaseStudy(cs)}
+                      style={{ background: 'none', border: 'none', color: 'inherit', font: 'inherit', textAlign: 'left', cursor: 'pointer', padding: 0 }}
+                      className="hover-accent"
+                    >
+                      {cs.title}
+                    </button>
+                  </h3>
+
+                  <p style={{ color: 'hsl(var(--text-secondary))', marginBottom: '1.25rem', lineHeight: '1.6', fontSize: '0.95rem', flexGrow: 1 }}>
+                    {cs.executiveSummary}
+                  </p>
+
+                  {/* Architecture Teaser */}
+                  <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid var(--glass-border)', borderRadius: '8px', padding: '0.85rem 1rem', marginBottom: '1.25rem' }}>
+                    <span style={{ fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                      Core Engineering Problem:
+                    </span>
+                    <p style={{ fontSize: '0.875rem', color: 'hsl(var(--text-secondary))', lineHeight: '1.5', margin: 0 }}>
+                      {cs.problem.length > 130 ? cs.problem.slice(0, 130) + '...' : cs.problem}
+                    </p>
+                  </div>
+
+                  {/* Tech Tags */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem' }}>
+                    {cs.tags.map((tag, tIdx) => (
+                      <span key={tIdx} className="tag-pill">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => setSelectedCaseStudy(cs)}
+                      className="btn btn-primary"
+                      style={{ flexGrow: 1, justifyContent: 'center', padding: '0.6rem 1rem', fontSize: '0.9rem' }}
+                    >
+                      <BookOpen size={16} />
+                      Deep Dive Case Study
+                    </button>
+                    <a
+                      href={`https://github.com/SumitDalavi/${cs.repo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline"
+                      style={{ padding: '0.6rem 0.9rem', fontSize: '0.9rem' }}
+                      title="View GitHub Repository"
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {filteredCaseStudies.length > 6 && (
+              <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                <button
+                  onClick={() => setShowAllProjects(!showAllProjects)}
+                  className="btn btn-outline"
+                  style={{ minWidth: '280px', justifyContent: 'center' }}
+                >
+                  {showAllProjects ? (
+                    <>Show Less <ChevronUp size={16} /></>
+                  ) : (
+                    <>Show All {filteredCaseStudies.length} Ranked Case Studies <ChevronDown size={16} /></>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* MODE 2: ALL 70 PROJECTS */}
+        {viewMode === 'all-projects' && (
+          <>
+            <div className="grid grid-2">
+              {displayedProjects.map((project, idx) => {
+                const cs = caseStudyMap.get(project.repo);
+                return (
+                  <div 
+                    key={idx} 
+                    className="glass-panel" 
+                    style={{ 
+                      padding: '2rem', 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      border: cs ? '1px solid hsla(var(--accent-primary), 0.3)' : '1px solid var(--glass-border)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem', gap: '1rem' }}>
+                      <div>
+                        {cs && (
+                          <span className="badge-rank" style={{ marginBottom: '0.5rem' }}>
+                            Case Study #{cs.rank}
+                          </span>
+                        )}
+                        <h3 style={{ fontSize: '1.25rem', lineHeight: '1.4' }}>
+                          <a 
+                            href={`https://github.com/SumitDalavi/${project.repo}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="hover-accent" 
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                          >
+                            {project.title}
+                          </a>
+                        </h3>
+                      </div>
+                      <a 
+                        href={`https://github.com/SumitDalavi/${project.repo}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="hover-accent"
+                        style={{ flexShrink: 0 }}
+                      >
+                        <ExternalLink size={20} />
+                      </a>
+                    </div>
+
+                    <p style={{ color: 'hsl(var(--text-secondary))', marginBottom: '1.25rem', lineHeight: '1.6', flexGrow: 1, fontSize: '0.95rem' }}>
+                      {project.description}
+                    </p>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: cs ? '1.25rem' : '0' }}>
+                      {project.tags.map((tag, tIdx) => (
+                        <span key={tIdx} className="tag-pill">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {cs && (
+                      <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
+                        <button
+                          onClick={() => setSelectedCaseStudy(cs)}
+                          className="btn btn-outline"
+                          style={{ width: '100%', justifyContent: 'center', fontSize: '0.85rem', padding: '0.5rem 1rem' }}
+                        >
+                          <BookOpen size={14} />
+                          Read Architecture Case Study
+                          <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {filteredAllProjects.length > 8 && (
+              <div style={{ marginTop: '3rem', textAlign: 'center' }}>
+                <button
+                  onClick={() => setShowAllProjects(!showAllProjects)}
+                  className="btn btn-outline"
+                  style={{ minWidth: '280px', justifyContent: 'center' }}
+                >
+                  {showAllProjects ? (
+                    <>Show Less <ChevronUp size={16} /></>
+                  ) : (
+                    <>Show All {filteredAllProjects.length} Projects <ChevronDown size={16} /></>
+                  )}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Modal View */}
+        {selectedCaseStudy && (
+          <CaseStudyModal
+            caseStudy={selectedCaseStudy}
+            onClose={() => setSelectedCaseStudy(null)}
+          />
+        )}
+
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
-          <a href="#experience" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer', display: 'inline-block' }} className="animate-bounce">
+          <a href="#timeline" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer', display: 'inline-block' }} className="animate-bounce">
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
-              <span>View Experience and Certifications</span>
+              <span>View Career Progression & Leadership</span>
               <ChevronDown size={24} />
             </div>
           </a>

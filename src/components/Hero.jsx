@@ -28,12 +28,16 @@ const Hero = () => {
               <Globe size={20} />
               LinkedIn
             </a>
+            <a href="mailto:sumit.dalavi1994@gmail.com" className="btn btn-outline">
+              <Mail size={20} />
+              Contact Email
+            </a>
           </div>
         </div>
       </div>
       
       <div style={{ position: 'absolute', bottom: '2rem', left: 0, width: '100%', display: 'flex', justifyContent: 'center' }}>
-        <a href="#skills" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer' }} className="animate-bounce">
+        <a href="#projects" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer' }} className="animate-bounce">
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
             <span>Scroll to Explore</span>
             <ChevronDown size={24} />
