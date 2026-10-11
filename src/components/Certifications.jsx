@@ -23,7 +23,7 @@ const Certifications = () => {
     { title: "Career Essentials in GitHub Professional Certificate", issuer: "Github", url: "https://www.linkedin.com/learning/certificates/d2645909f6a2426b9fd9464bb715222dbf1f67af9a18a5f96b6b527f37ab75a3" },
     { title: "Atlassian Agile Project Management Professional Certificate", issuer: "Atlassian", url: "https://www.linkedin.com/learning/certificates/2c392dda993cf9ef408788bb37bdab1899937d5db8d7a1584ddcd46019d03c9d" },
     { title: "Career Essentials in Software Development", issuer: "Microsoft", url: "https://www.linkedin.com/learning/certificates/a932b18b7b3c18a4a17b50c757c30ede8f2fb31d4794c6725da4bd1d8f028454" },
-    { title: "Security Champion", issuer: "PTC Software", date: "2022–Present" },
+    { title: "Security Champion", issuer: "PTC Software", date: "2022–2026" },
     { title: "Diploma in Japanese (JLPT N4)", issuer: "SPPU, Pune", date: "2021" }
   ];
 
@@ -45,7 +45,7 @@ const Certifications = () => {
         <h2 className="section-title">
           <span className="text-gradient">Experience</span> & Professional Development
         </h2>
-        
+
         <div className="grid grid-2" style={{ alignItems: 'flex-start' }}>
           {/* Experience & Impact Summary */}
           <div className="glass-panel" style={{ display: 'flex', flexDirection: 'column' }}>
@@ -53,11 +53,11 @@ const Certifications = () => {
               <Briefcase size={28} className="text-gradient" />
               <h3 style={{ fontSize: '1.75rem' }}>Selected Impact</h3>
             </div>
-            
+
             <p style={{ color: 'hsl(var(--text-secondary))', marginBottom: '2rem', lineHeight: '1.7' }}>
-              Across my <strong>9.5 years</strong> of engineering, I focus on measurable improvements to delivery pipelines, cloud infrastructure, and platform security:
+              Across my <strong>10 years</strong> of engineering, I focus on measurable improvements to delivery pipelines, cloud infrastructure, and platform security:
             </p>
-            
+
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
               {displayedImpacts.map((impact, idx) => (
                 <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
@@ -68,9 +68,9 @@ const Certifications = () => {
             </ul>
 
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <button 
+              <button
                 onClick={() => setShowAllImpact(!showAllImpact)}
-                className="btn btn-outline" 
+                className="btn btn-outline"
                 style={{ width: '100%', justifyContent: 'center' }}
               >
                 {showAllImpact ? (
@@ -88,7 +88,7 @@ const Certifications = () => {
               <Award size={28} className="text-gradient" />
               <h3 style={{ fontSize: '1.75rem' }}>Certifications & Training</h3>
             </div>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
               {displayedCerts.map((cert, idx) => (
                 <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--glass-border)', paddingBottom: '1rem' }}>
@@ -114,9 +114,9 @@ const Certifications = () => {
             </div>
 
             <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <button 
+              <button
                 onClick={() => setShowAllCerts(!showAllCerts)}
-                className="btn btn-outline" 
+                className="btn btn-outline"
                 style={{ width: '100%', justifyContent: 'center' }}
               >
                 {showAllCerts ? (
@@ -125,7 +125,7 @@ const Certifications = () => {
                   <>Show All {certs.length} Certifications <ChevronDown size={16} /></>
                 )}
               </button>
-              
+
               <a href="https://in.linkedin.com/in/sumit-dalavi-762838129/details/certifications/" target="_blank" rel="noopener noreferrer" className="btn btn-linkedin" style={{ width: '100%', justifyContent: 'center' }}>
                 View Credentials on LinkedIn <ExternalLink size={16} />
               </a>

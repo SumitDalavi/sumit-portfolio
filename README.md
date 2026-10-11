@@ -51,7 +51,7 @@ To run this project locally, follow these steps:
 
 ## 👨‍💻 About Me
 
-**Technical Lead | Senior DevOps / Platform Engineer** with 9.5+ years of experience spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and site reliability. 
+**Technical Lead | Senior DevOps / Platform Engineer** with 10+ years of experience spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and site reliability. 
 Security Champion and advocate for AI-Assisted Engineering.
 
 - **LinkedIn**: [Sumit Dalavi](https://in.linkedin.com/in/sumit-dalavi-762838129)

@@ -13,7 +13,7 @@ const Hero = () => {
             Technical Lead | Senior DevOps / Platform Engineer | DevSecOps
           </h2>
           <p style={{ fontSize: '1.125rem', marginBottom: '1.5rem', lineHeight: '1.8' }}>
-            With over <strong>9.5 years of experience</strong> spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
+            With over <strong>10 years of experience</strong> spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
           </p>
           <p style={{ fontSize: '1.05rem', color: 'hsl(var(--text-secondary))', marginBottom: '2.5rem', lineHeight: '1.8' }}>
             As a <strong>Security Champion</strong> and advocate for <strong>AI-Assisted Engineering</strong>, I have a proven track record of cutting deployment lead times by ~70% and improving vulnerability remediation cycles by ~40% for enterprise SaaS platforms at scale.
