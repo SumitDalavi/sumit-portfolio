@@ -77,7 +77,7 @@ const CareerTimeline = () => {
             <span className="text-gradient">Professional Career</span> & Leadership Timeline
           </h2>
           <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '750px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            A verified 9.5+ year progression starting in January 2017 spanning core backend systems, distributed cloud platforms, and Technical Leadership in DevSecOps and Kubernetes.
+            A verified 10-year progression starting in January 2017 spanning core backend systems, distributed cloud platforms, and Technical Leadership in DevSecOps and Kubernetes.
           </p>
         </div>
 

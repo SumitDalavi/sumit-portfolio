@@ -666,7 +666,7 @@ const Projects = () => {
             <span className="text-gradient">Engineering Portfolio</span> & Systems Architecture
           </h2>
           <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '750px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            Ground-truth systems engineering spanning 9.5+ years of Kubernetes internals, DevSecOps, SRE resilience, and autonomous AI infrastructure.
+            Ground-truth systems engineering spanning 10 years of Kubernetes internals, DevSecOps, SRE resilience, and autonomous AI infrastructure.
           </p>
         </div>
 
