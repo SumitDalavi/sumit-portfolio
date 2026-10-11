@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ExternalLink, Shield, Cpu, CheckCircle2, AlertTriangle, Layers, GitBranch, ArrowRight, Share2, Check, FileText } from 'lucide-react';
 
 const CaseStudyModal = ({ caseStudy, onClose }) => {
@@ -106,7 +107,7 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
     }
   };
 
-  return (
+  const modalContent = (
     <div 
       className="modal-backdrop animate-fade-in" 
       onClick={onClose}
@@ -334,6 +335,8 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 };
 
 export default CaseStudyModal;
