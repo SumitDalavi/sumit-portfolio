@@ -4,8 +4,9 @@
   --accent-primary: 199 89% 48%; /* Cyan */
   --accent-secondary: 267 75% 65%; /* Purple */
   --text-primary: 210 40% 98%;
-  --text-secondary: 215 20% 65%;
-  --glass-bg: rgba(30, 41, 59, 0.7);
+  --glass-rgb: 30, 41, 59;
+  --glass-bg: rgba(var(--glass-rgb), 0.7);
+  --glass-bg-subtle: rgba(var(--glass-rgb), 0.35);
   --glass-border: rgba(255, 255, 255, 0.1);
   --font-family: 'Outfit', sans-serif;
 }
@@ -404,7 +405,7 @@ a:hover {
 }
 
 .filter-tab-btn {
-  background: hsla(var(--glass-bg), 0.5);
+  background: rgba(var(--glass-rgb), 0.5);
   border: 1px solid var(--glass-border);
   color: hsl(var(--text-secondary));
   padding: 0.5rem 1.25rem;
@@ -494,7 +495,7 @@ a:hover {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: hsla(var(--glass-bg), 0.6);
+  background: rgba(var(--glass-rgb), 0.6);
   border: 1px solid var(--glass-border);
   color: hsl(var(--text-secondary));
   transition: all 0.25s ease;
@@ -518,6 +519,19 @@ a:hover {
   .mobile-menu-btn {
     display: none;
   }
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 

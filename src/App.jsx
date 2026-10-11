@@ -16,8 +16,8 @@ function App() {
         Skip to main content
       </a>
       <Navbar />
-      <Hero />
       <main id="main-content">
+        <Hero />
         <Projects />
         <CareerTimeline />
         <EngineeringNotes />

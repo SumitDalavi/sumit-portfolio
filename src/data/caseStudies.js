@@ -6,6 +6,7 @@ export const caseStudies = [
     title: "Secure Dev Platform Demo",
     tier: "Tier 1: Flagship Architectural Study",
     category: "Platform Engineering",
+    categoryId: "platform",
     executiveSummary: "End-to-end multi-stage platform integration orchestrating policy enforcement, self-service developer provisioning, and security admission controls with deterministic failure handling across Linux environments.",
     problem: "Enterprise developers face fragmented delivery pipelines where security controls, admission webhooks, and infrastructure provisioning operate in silos, causing configuration drift, readiness race conditions, and uncontrolled deployment failures.",
     architecture: "A six-stage integrated platform pipeline connecting developer self-service CRDs, mutating/validating admission webhooks, automated RBAC/NetworkPolicy generation, and least-privilege workload deployment.",
@@ -42,9 +43,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Resolved Linux portability issues with shell exit codes, handled recursive manifest application race conditions, and corrected container readiness gates during automated CI runs.",
-    results: "Validated full 6-stage platform provisioning lifecycle in isolated CI pipelines, verifying policy enforcement with 100% pass rate across expected-admission and expected-denial test suites.",
+    results: "Validated full 6-stage platform provisioning lifecycle in isolated CI pipelines, verifying policy enforcement across expected-admission and expected-denial test suites.",
     limitations: "Demonstrated scope focuses on core platform orchestration and admission gating; enterprise identity federation and external portal components operate in mock provider mode.",
-    tags: ["Kubernetes", "Platform Engineering", "Admission Control", "Go", "NetworkPolicy", "Security"]
+    tags: ["Kubernetes", "Platform Engineering", "Admission Control", "Go", "NetworkPolicy", "Security"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/secure-dev-platform-demo" },
+      { label: "Architecture & Pipeline Spec", url: "https://github.com/SumitDalavi/secure-dev-platform-demo#architecture" },
+      { label: "Platform Verification Test Suite", url: "https://github.com/SumitDalavi/secure-dev-platform-demo/tree/main" }
+    ]
   },
   {
     rank: 2,
@@ -53,8 +59,9 @@ export const caseStudies = [
     title: "Durable Incident Agent",
     tier: "Tier 1: Flagship Architectural Study",
     category: "Reliability & SRE",
-    executiveSummary: "Autonomous incident response agent built on durable execution primitives, executing multi-step remediation workflows with human-in-the-loop gates and sustained post-mitigation telemetry verification.",
-    problem: "Standard automated remediation scripts lack state persistence across crashes, risk executing duplicate side-effects (e.g., redundant pod restarts or route changes), and fail to monitor whether a fix holds over an extended observation window.",
+    categoryId: "sre",
+    executiveSummary: "Autonomous incident response agent built on durable execution primitives, executing multi-step remediation workflows with human-in-the-loop approval gates and sustained post-mitigation telemetry verification.",
+    problem: "Standard automated remediation scripts lack state persistence across crashes, risk executing duplicate actions during retries, and fail to verify whether a mitigation holds over an extended observation window.",
     architecture: "Durable state-machine workflow executing automated anomaly triage, diagnostic artifact collection, approval-gated mitigation, and a sustained cool-down verification loop that observes p95 latency and error rate stability.",
     diagram: `+--------------------+       +----------------------+       +-----------------------+
 |  Telemetry Anomaly | ----> | Diagnostic Collector | ----> | Remediation Plan Gen  |
@@ -64,13 +71,13 @@ export const caseStudies = [
                                                                         v
 +--------------------+       +----------------------+       +-----------+-----------+
 | Sustained Recovery | <---- | Mitigation Execution | <---- | Human-in-the-Loop     |
-| (p95 Cooldown Obs) |       | (Idempotent Action)  |       | Approval Gate (Auth)  |
+| (p95 Cooldown Obs) |       | (Action Checkpoint)  |       | Approval Gate (Auth)  |
 +--------------------+       +----------------------+       +-----------------------+`,
     decisions: [
       {
-        title: "Durable Step Execution with Unique Evidence IDs",
-        decision: "Assigned cryptographically unique Evidence IDs and checkpoints to every diagnostic snapshot and remediation step.",
-        rationale: "Guarantees state persistence across agent restarts and provides a tamper-evident audit trail for post-incident review."
+        title: "Durable Step Checkpointing with Evidence Snapshots",
+        decision: "Captures structured evidence snapshots and checkpointed step states for every diagnostic evaluation and remediation trigger.",
+        rationale: "Maintains recovery progress across process restarts and supplies a structured audit record for post-incident review."
       },
       {
         title: "Sustained Post-Mitigation Cooldown Windows",
@@ -78,10 +85,15 @@ export const caseStudies = [
         rationale: "Prevents premature incident closure caused by transient metric dips right after pod restarts."
       }
     ],
-    remediation: "Eliminated container networking race conditions during parallel diagnostics, added metric cooldown verification, and ensured side-effect execution is strictly idempotent.",
-    results: "Demonstrated full end-to-end automated incident triage, gated approval, and sustained recovery verification with zero duplicate side-effects across simulated node and network outages.",
+    remediation: "Eliminated container networking race conditions during parallel diagnostics, added metric cooldown verification, and structured remediation actions with explicit checkpoint boundaries.",
+    results: "Validated automated incident triage, approval gate checkpointing, and post-mitigation metric verification across simulated node restart test cases.",
     limitations: "Designed for Kubernetes-orchestrated workloads; external cloud API mitigations rely on adapter contracts rather than universal cloud provider coverage.",
-    tags: ["Python", "Durable Execution", "Autonomous Agents", "SRE", "Observability", "Prometheus"]
+    tags: ["Python", "Durable Execution", "Autonomous Agents", "SRE", "Observability", "Prometheus"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/durable-incident-agent" },
+      { label: "Workflow Architecture Document", url: "https://github.com/SumitDalavi/durable-incident-agent#architecture" },
+      { label: "Step Checkpoint Verification Suite", url: "https://github.com/SumitDalavi/durable-incident-agent/tree/main" }
+    ]
   },
   {
     rank: 3,
@@ -90,9 +102,10 @@ export const caseStudies = [
     title: "Agent Sandbox Platform",
     tier: "Tier 1: Flagship Architectural Study",
     category: "AI Infrastructure",
-    executiveSummary: "Secure, containerized runtime sandbox enforcing network isolation, tokenized execution budgets, and deterministic cleanup boundaries for autonomous AI code execution.",
-    problem: "Running AI-generated code or untrusted agent tools poses severe security risks, including unauthorized egress data exfiltration, local resource exhaustion, and leftover zombie processes.",
-    architecture: "A Go-based sandbox orchestration daemon that spins up ephemeral, capability-dropped containers with strict Linux cgroup limits, NetworkMode: none isolation, and synchronous post-execution cleanup handlers.",
+    categoryId: "ai",
+    executiveSummary: "Secure, containerized runtime sandbox orchestrator built with TypeScript/Node.js and Dockerode, enforcing ephemeral container isolation, strict timeout budgets, and deterministic cleanup boundaries for untrusted code execution.",
+    problem: "Executing untrusted AI-generated code or third-party agent tools directly on host systems risks unauthorized network egress, local resource exhaustion, and lingering zombie processes.",
+    architecture: "TypeScript/Node.js supervisor daemon managing ephemeral Docker containers via Dockerode with dropped Linux capabilities, non-root user execution, strict memory/CPU quota ceilings, and synchronous teardown handlers.",
     diagram: `+-------------------------------------------------------------------------+
 |                       Agent Invocation Request                          |
 |             (Code Payload, Resource Quota, Tokenized Policy)            |
@@ -100,10 +113,10 @@ export const caseStudies = [
                                      |
                                      v
 +------------------------------------+------------------------------------+
-|                    Sandbox Supervisor Daemon (Go)                       |
-|   - Strips Linux Capabilities (CAP_DROP ALL)                            |
-|   - Applies Memory / CPU Limits via Cgroups                             |
-|   - Configures Network Isolation (NetworkMode: none)                    |
+|         Sandbox Supervisor Daemon (TypeScript / Dockerode)              |
+|   - Strips Linux Capabilities (CapDrop: ALL)                            |
+|   - Enforces Non-Root Execution (User: 1000:1000)                       |
+|   - Sets Memory Ceiling (Memory limit) & CPU Throttling (NanoCPUs)      |
 |   - Mounts Ephemeral Read-Only RootFS with Temporary Scratch Volume     |
 +------------------------------------+------------------------------------+
                                      |
@@ -111,13 +124,13 @@ export const caseStudies = [
 +------------------------------------+------------------------------------+
 |                  Execution & Deterministic Cleanup                      |
 |   - Streams stdout/stderr with buffer caps                              |
-|   - Synchronous teardown propagating cleanup failures if any remain     |
+|   - Synchronous container teardown propagating errors if lingering      |
 +-------------------------------------------------------------------------+`,
     decisions: [
       {
-        title: "Strict NetworkMode: none by Default",
-        decision: "Disabled container networking entirely unless explicitly granted through an inspected proxy token.",
-        rationale: "Completely eliminates data exfiltration and reverse shell vulnerabilities from untrusted agent code."
+        title: "Least-Privilege Container Configuration",
+        decision: "Enforced non-root user IDs, dropped all Linux capabilities, and configured read-only root filesystems for container workers.",
+        rationale: "Mitigates privilege escalation risks and restricts modifications to temporary scratch volumes."
       },
       {
         title: "Synchronous Cleanup Failure Propagation",
@@ -125,10 +138,15 @@ export const caseStudies = [
         rationale: "Prevents resource leaks and ensures hosts never accumulate orphaned sandboxes over high-throughput execution runs."
       }
     ],
-    remediation: "Corrected launcher parity across host architectures, fixed cleanup failure propagation when containers were killed mid-flight, and hardened tokenized policy schemas.",
-    results: "Successfully executes untrusted Python and Go payloads with 0% network egress leakage and deterministic sub-second container termination.",
-    limitations: "Container-based isolation (gVisor/standard runc); does not claim microVM (Firecracker) hardware-level hypervisor virtualization.",
-    tags: ["Go", "Container Security", "Linux Cgroups", "Sandboxing", "AI Safety", "DevSecOps"]
+    remediation: "Corrected container launcher parity across environments, fixed cleanup failure propagation when containers timed out, and hardened execution schema validation.",
+    results: "Successfully executes untrusted code payloads in isolated containers with enforced execution timeouts and verified container destruction on exit.",
+    limitations: "Container-based isolation implemented via Dockerode; advanced kernel sandboxing (such as gVisor runsc runtime or Firecracker microVMs) was identified as a future hardening path and intentionally deferred.",
+    tags: ["TypeScript", "Node.js", "Dockerode", "Container Security", "Sandboxing", "AI Safety"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/agent-sandbox-platform" },
+      { label: "Supervisor Architecture Spec", url: "https://github.com/SumitDalavi/agent-sandbox-platform#architecture" },
+      { label: "Sandbox Isolation Test Suite", url: "https://github.com/SumitDalavi/agent-sandbox-platform/tree/main" }
+    ]
   },
   {
     rank: 4,
@@ -137,9 +155,10 @@ export const caseStudies = [
     title: "K8s Admission Webhook (From Scratch)",
     tier: "Tier 1: Flagship Architectural Study",
     category: "Kubernetes Internals",
-    executiveSummary: "Custom Kubernetes mutating and validating admission webhooks developed from scratch in Go without heavy frameworks, demonstrating raw API contracts, TLS lifecycle, and fail-open/fail-closed policies.",
+    categoryId: "k8s",
+    executiveSummary: "Custom Kubernetes mutating and validating admission webhooks developed from scratch in Go without third-party frameworks, demonstrating raw API contracts, TLS lifecycle, and fail-open/fail-closed policies.",
     problem: "Most admission controller implementations rely on bulky frameworks that obscure the underlying Kubernetes AdmissionReview v1 JSON serialization, TLS certificate lifecycle, and fail-closed vs fail-open availability tradeoffs.",
-    architecture: "Lightweight, high-performance HTTP/2 webhook server handling MutatingAdmissionWebhook and ValidatingAdmissionWebhook requests directly via standard Go standard library and k8s.io/api primitives.",
+    architecture: "Lightweight HTTP/2 webhook server handling MutatingAdmissionWebhook and ValidatingAdmissionWebhook requests directly using standard Go library primitives and k8s.io/api struct models.",
     diagram: `+--------------------+       +---------------------------------------------+
 |  kubectl / Client  | ----> |             Kubernetes API Server           |
 +--------------------+       +----------------------+----------------------+
@@ -148,7 +167,7 @@ export const caseStudies = [
                                                     v
                              +----------------------+----------------------+
                              |      Admission Webhook Server (Go)          |
-                             |   - TLS Server with Auto-reloaded Certs     |
+                             |   - TLS Server with Mounted Certificates    |
                              |   - JSON Patch Mutation (Sidecar Injection) |
                              |   - Security Validation (Disallow Root Pods)|
                              +----------------------+----------------------+
@@ -160,20 +179,25 @@ export const caseStudies = [
                              +---------------------------------------------+`,
     decisions: [
       {
-        title: "Hand-Crafted HTTP Server over Controller-Runtime",
-        decision: "Built the webhook server using standard Go HTTP primitives without controller-runtime abstraction.",
-        rationale: "Provides total transparency over the AdmissionReview v1 API contract, raw JSONPatch generation, and minimal binary footprint (<20MB)."
+        title: "Standard Go HTTP Primitives over Framework Abstractions",
+        decision: "Built the webhook server using standard Go net/http primitives and k8s.io/api types without controller-runtime abstraction.",
+        rationale: "Provides total transparency over AdmissionReview v1 JSON serialization, RFC 6902 JSONPatch generation, and minimal binary footprint."
       },
       {
         title: "Explicit Fail-Closed vs. Fail-Open Strategy",
-        decision: "Configured FailurePolicy: Fail for security validation webhooks with multi-replica PDBs and high-availability endpoints.",
-        rationale: "Guarantees pods can never bypass security checks even during cluster networking reconfigurations."
+        decision: "Configured FailurePolicy: Fail for security validation webhooks with multi-replica PodDisruptionBudgets and readiness checks.",
+        rationale: "Ensures critical admission security policies cannot be bypassed during transient webhook pod redeployments."
       }
     ],
-    remediation: "Handled self-signed TLS cert rotation gracefully, resolved JSON patch RFC 6902 ordering issues on nested container arrays, and optimized webhook response latency to <15ms.",
-    results: "Sub-15ms p99 admission evaluation latency; 100% policy enforcement across 500+ parallel pod admission test suites.",
-    limitations: "Focuses on admission-time contracts; does not perform runtime kernel tracing (eBPF) once pods are running.",
-    tags: ["Go", "Kubernetes", "Admission Webhook", "TLS", "JSONPatch", "DevSecOps"]
+    remediation: "Configured TLS server certificate provisioning for API server communication, resolved JSON patch RFC 6902 ordering issues on nested container arrays, and verified non-root pod enforcement.",
+    results: "Validated mutating and validating webhook logic against Kubernetes API server AdmissionReview contracts, correctly enforcing label requirements and disallowing unprivileged root containers across automated integration tests.",
+    limitations: "Uses static TLS certificate mounting (manual renewal); automated in-cluster rotation via cert-manager is left to external operators. Focuses on admission-time contracts rather than runtime kernel enforcement.",
+    tags: ["Go", "Kubernetes", "Admission Webhook", "TLS", "JSONPatch", "DevSecOps"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/k8s-admission-webhook-from-scratch" },
+      { label: "AdmissionReview Contract Document", url: "https://github.com/SumitDalavi/k8s-admission-webhook-from-scratch#architecture" },
+      { label: "Webhook Integration Test Suite", url: "https://github.com/SumitDalavi/k8s-admission-webhook-from-scratch/tree/main" }
+    ]
   },
   {
     rank: 5,
@@ -182,8 +206,9 @@ export const caseStudies = [
     title: "K8s Golden Path Provisioner",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "Platform Engineering",
-    executiveSummary: "Self-service Kubernetes operator provisioning compliant, production-ready namespaces with pre-configured RBAC, default-deny NetworkPolicies, and resource quotas from a single developer CRD.",
-    problem: "Development teams spend days filing tickets for new Kubernetes namespaces, resulting in inconsistent security policies, missing network isolation, and unbounded cloud resource consumption.",
+    categoryId: "platform",
+    executiveSummary: "Self-service Kubernetes operator provisioning standardized, isolated namespaces with pre-configured RBAC, default-deny NetworkPolicies, and resource quotas from a single developer CRD.",
+    problem: "Development teams often rely on manual ticketing for new Kubernetes namespaces, resulting in inconsistent security configurations, missing network isolation, and unbounded cloud resource consumption.",
     architecture: "A Kubernetes Operator built with Kubebuilder reconciling custom PlatformService and GoldenPath CRDs into hardened namespace environments with automated owner RBAC and resource quotas.",
     diagram: `[Developer CRD: GoldenPath] ---> [Kubernetes Controller Reconciler]
                                          |
@@ -202,9 +227,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Resolved race condition between namespace creation and NetworkPolicy attachment; refined CRD validation openAPIV3 schemas.",
-    results: "Reduced namespace provisioning time from multiple days to under 3 seconds with guaranteed security compliance by default.",
+    results: "Automated end-to-end namespace scaffolding from a single CRD, establishing consistent default-deny network isolation, RBAC rolebindings, and resource quotas without manual ticket handoffs.",
     limitations: "Manages Kubernetes-native resources; external cloud resources (databases, queues) rely on external Crossplane/Terraform hooks.",
-    tags: ["Go", "Kubernetes Operator", "Kubebuilder", "Platform Engineering", "RBAC"]
+    tags: ["Go", "Kubernetes Operator", "Kubebuilder", "Platform Engineering", "RBAC"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/k8s-golden-path-provisioner" },
+      { label: "Operator Reconciliation Spec", url: "https://github.com/SumitDalavi/k8s-golden-path-provisioner#architecture" },
+      { label: "EnvTest Controller Suite", url: "https://github.com/SumitDalavi/k8s-golden-path-provisioner/tree/main" }
+    ]
   },
   {
     rank: 6,
@@ -213,8 +243,9 @@ export const caseStudies = [
     title: "A2A Incident Mesh",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
+    categoryId: "ai",
     executiveSummary: "Agent-to-Agent communication mesh enabling collaborative multi-agent incident response with structured message contracts, coordinator polling, and distributed deadlock avoidance.",
-    problem: "Single-agent LLM systems fail on complex production outages requiring concurrent telemetry analysis, network diagnosis, and log correlation due to context exhaustion and lack of specialized domain tooling.",
+    problem: "Single-agent LLM systems struggle on multi-service outages requiring concurrent telemetry analysis, network diagnosis, and log correlation due to context limits and lack of domain specialization.",
     architecture: "Mesh architecture featuring a central Incident Coordinator Agent orchestrating specialized worker agents (Telemetry Agent, Log Analysis Agent, Network Diagnostics Agent) using typed JSON-RPC message contracts.",
     diagram: `                   +------------------------------+
                    |  Incident Coordinator Agent  |
@@ -235,9 +266,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Resolved race condition where cancelled agent subtasks were erroneously marked completed; introduced explicit UUID message mapping.",
-    results: "Simulated multi-tier outage triage with 3 specialized agents completed root-cause analysis 4.5x faster than a monolithic LLM prompt.",
+    results: "Validated structured multi-agent interoperability across simulated multi-service incident fixtures, verifying typed JSON-RPC task delegation and preventing coordinator deadlocks.",
     limitations: "Domain outputs currently validated against recorded simulation fixtures; live cloud integration requires authenticated tenant bridges.",
-    tags: ["TypeScript", "Multi-Agent Systems", "SRE", "Distributed Systems", "Incident Management"]
+    tags: ["TypeScript", "Multi-Agent Systems", "SRE", "Distributed Systems", "Incident Management"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/a2a-incident-mesh" },
+      { label: "Mesh Coordination Architecture", url: "https://github.com/SumitDalavi/a2a-incident-mesh#architecture" },
+      { label: "Agent Simulation Fixture Suite", url: "https://github.com/SumitDalavi/a2a-incident-mesh/tree/main" }
+    ]
   },
   {
     rank: 7,
@@ -246,6 +282,7 @@ export const caseStudies = [
     title: "Inference Performance Lab",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
+    categoryId: "ai",
     executiveSummary: "Benchmarking and profiling laboratory for LLM inference serving, characterizing streaming latency, Time-to-First-Token (TTFT), token generation rates, and concurrency bottlenecks.",
     problem: "Evaluating LLM serving engines without standardized arrival rate models leads to unpredictable production latency spikes and misconfigured autoscaling thresholds.",
     architecture: "A Python-based benchmarking suite implementing Poisson and bursty traffic arrival models, real-time token streaming parsers, and statistical p50/p95/p99 latency calculations.",
@@ -263,7 +300,7 @@ export const caseStudies = [
 [Time-to-First-Token (TTFT)]  [Inter-Token Latency (ITL)]  [Throughput (Tokens/sec)]`,
     decisions: [
       {
-        title: "Finite-Value Guards on Latency Math",
+        title: "Finite-Value Guards on Latency Calculations",
         decision: "Implemented strict finite-value guards and outlier filtering on streaming latency calculations.",
         rationale: "Prevented statistical distortion when network timeouts or model warmups emitted single-token outliers."
       }
@@ -271,7 +308,12 @@ export const caseStudies = [
     remediation: "Fixed single-token response handling in streaming parser; calibrated client concurrency to avoid client-side socket saturation.",
     results: "Quantified TTFT and tokens/sec across concurrency tiers (1-64 concurrent clients), identifying saturation inflection points with high reproducibility.",
     limitations: "Focuses on software serving metrics and client-side profiling; hardware thermal throttling requires bare-metal GPU telemetry.",
-    tags: ["Python", "LLM Inference", "Benchmarking", "vLLM", "Performance Engineering"]
+    tags: ["Python", "LLM Inference", "Benchmarking", "vLLM", "Performance Engineering"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/inference-performance-lab" },
+      { label: "Profiling Methodology Spec", url: "https://github.com/SumitDalavi/inference-performance-lab#architecture" },
+      { label: "Benchmark Harness & Test Data", url: "https://github.com/SumitDalavi/inference-performance-lab/tree/main" }
+    ]
   },
   {
     rank: 8,
@@ -280,7 +322,8 @@ export const caseStudies = [
     title: "K8s Secret Rotation Operator",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "Security & DevSecOps",
-    executiveSummary: "Kubernetes operator automating zero-downtime secret generation, lifecycle rotation, and dependent workload rolling updates with dual-credential overlap support.",
+    categoryId: "security",
+    executiveSummary: "Kubernetes operator automating scheduled secret generation, Secret resource reconciliation, and dependent workload rolling restarts with dual-credential overlap modeling.",
     problem: "Manual credential rotation is error-prone and frequently causes service outages when downstream pods restart before newly generated database secrets become valid.",
     architecture: "Custom Kubernetes controller managing SecretRotation CRDs that interface with backend secret stores, maintain previous and next credential versions during rotation, and trigger orchestrated rollout restarts.",
     diagram: `[SecretRotation CRD] ---> [Rotation Controller]
@@ -294,15 +337,20 @@ export const caseStudies = [
 [Update K8s Secret Resource]                   [Trigger Rolling Restart of Dependent Pods]`,
     decisions: [
       {
-        title: "Dual-Credential Grace Window",
-        decision: "Enforced dual-credential validity period where both V1 and V2 passwords remain accepted by the database during rolling updates.",
+        title: "Dual-Credential Grace Window Modeling",
+        decision: "Enforced dual-credential validity periods where both V1 and V2 passwords remain accepted by the backend store during rolling updates.",
         rationale: "Eliminates connection downtime while old pods are draining and new pods are starting."
       }
     ],
-    remediation: "Added consumer adoption boundary checks to confirm all pods are healthy on V2 before retiring V1 credentials.",
-    results: "Automated rotation cycles completed with 0 failed HTTP requests across continuous 100 RPS simulated traffic.",
-    limitations: "Requires backend services or databases to support concurrent multi-version credentials during the rotation grace window.",
-    tags: ["Go", "Kubernetes Operator", "Security", "Secret Management", "DevSecOps"]
+    remediation: "Defined explicit boundary separation between operator secret reconciliation and downstream client connection draining; managed versioned secret keys.",
+    results: "Successfully reconciled rotating credentials and triggered rolling pod restarts across automated controller integration test scenarios.",
+    limitations: "Operator manages Kubernetes Secret lifecycle and rolling deployment triggers; downstream application connection refreshing and database-level credential deprecation remain independent client-side boundaries.",
+    tags: ["Go", "Kubernetes Operator", "Security", "Secret Management", "DevSecOps"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/k8s-secret-rotation-operator" },
+      { label: "Operator Design & Boundary Spec", url: "https://github.com/SumitDalavi/k8s-secret-rotation-operator#architecture" },
+      { label: "Controller Integration Test Suite", url: "https://github.com/SumitDalavi/k8s-secret-rotation-operator/tree/main" }
+    ]
   },
   {
     rank: 9,
@@ -311,9 +359,10 @@ export const caseStudies = [
     title: "Voice Incident Commander",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
-    executiveSummary: "Hands-free voice interface for on-call engineers, parsing spoken incident commands into structured Kubernetes queries and runbook mitigation workflows.",
+    categoryId: "ai",
+    executiveSummary: "Hands-free voice interface for on-call engineers, parsing spoken queries into structured Kubernetes diagnostic queries with mandatory on-screen visual confirmation gates for any mutating actions.",
     problem: "During severe critical incidents, engineers on mobile or secondary devices need rapid access to cluster status and runbook triggers without navigating multi-step web consoles.",
-    architecture: "WebRTC and WebSocket voice streaming pipeline connected to a speech-to-text engine, intent classification agent with strict confirmation gates, and a Kubernetes cluster query executor.",
+    architecture: "WebRTC and WebSocket voice streaming pipeline connected to a speech-to-text engine, intent classification parser for diagnostic inspection, and a strict requirement for visual on-screen approval before any state-mutating runbook execution.",
     diagram: `[Spoken Voice Command] ---> [WebRTC / Audio Streaming]
                                        |
                                        v
@@ -322,21 +371,31 @@ export const caseStudies = [
                                        v
                          [Intent Classification Agent]
                                        |
-                      [Dangerous Action Confirmation Gate]
-                                       |
-                                       v
-                      [Kubernetes API / Runbook Execution]`,
+           +---------------------------+---------------------------+
+           | (Read-Only Query)                                     | (Mutating Action)
+           v                                                       v
+[Execute Diagnostic Query]                               [Visual On-Screen Confirmation Gate]
+                                                                   |
+                                                         [Engineer Clicks Approve]
+                                                                   |
+                                                                   v
+                                                         [Execute Mutating Runbook]`,
     decisions: [
       {
-        title: "Explicit Confirmation Barrier for Mutating Actions",
-        decision: "Require explicit dual-phase spoken confirmation before executing any state-mutating runbook (e.g., pod restart, traffic diversion).",
-        rationale: "Prevents misrecognized speech phonemes from triggering destructive cluster actions."
+        title: "On-Screen Visual Approval Barrier for Mutations",
+        decision: "Spoken commands are restricted to read-only diagnostics and draft mitigation staging; all state-mutating operations strictly require explicit on-screen visual confirmation.",
+        rationale: "Prevents misrecognized speech phonemes or ambient audio noise from triggering destructive cluster actions, enforcing a true two-factor verification boundary."
       }
     ],
     remediation: "Transitioned from pure browser mocks to structured audio fixture testing; implemented stream cancellation on abrupt disconnects.",
-    results: "Achieved sub-800ms speech-to-intent latency for cluster diagnostic queries with zero unverified mutations executed.",
+    results: "Validated speech-to-intent pipeline for read-only cluster queries and staging draft mitigations, with 100% of mutating actions gated behind visual on-screen confirmation.",
     limitations: "Demonstration runs in local mock audio fixture mode; production deployment depends on external STT API accuracy and ambient noise conditions.",
-    tags: ["Python", "Voice AI", "WebRTC", "Platform Engineering", "Incident Management"]
+    tags: ["Python", "Voice AI", "WebRTC", "Platform Engineering", "Incident Management"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/voice-incident-commander" },
+      { label: "Audio Pipeline & Security Architecture", url: "https://github.com/SumitDalavi/voice-incident-commander#architecture" },
+      { label: "Audio Fixture & Intent Test Suite", url: "https://github.com/SumitDalavi/voice-incident-commander/tree/main" }
+    ]
   },
   {
     rank: 10,
@@ -345,9 +404,10 @@ export const caseStudies = [
     title: "AI Control Plane Demo",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "AI Infrastructure",
-    executiveSummary: "Enterprise control plane orchestrating model routing, token rate-limiting, policy guardrails, and graceful multi-provider fallbacks across distributed AI services.",
+    categoryId: "ai",
+    executiveSummary: "Control plane proxy orchestrating model routing, token rate-limiting, policy guardrails, and graceful multi-provider fallbacks across distributed AI services.",
     problem: "Uncoordinated direct API calls to commercial LLMs create vendor lock-in, unmonitored security leakage, and system outages when upstream providers degrade.",
-    architecture: "Unified proxy gateway implementing intelligent semantic routing, token consumption quotas, PII redaction filters, and automated circuit breakers.",
+    architecture: "Unified proxy gateway implementing semantic routing rules, token consumption quotas, PII redaction filters, and automated circuit breakers.",
     diagram: `[Client Application] ---> [AI Control Plane Gateway]
                                     |
             +-----------------------+-----------------------+
@@ -367,14 +427,19 @@ export const caseStudies = [
     decisions: [
       {
         title: "Circuit-Breaker Pattern for Upstream Models",
-        decision: "Implemented automated circuit breaking with fallback to self-hosted/alternative models upon 3 consecutive upstream 5xx errors.",
-        rationale: "Maintains application availability even during widespread major LLM provider outages."
+        decision: "Implemented automated circuit breaking with fallback to self-hosted/alternative models upon repeated upstream 5xx errors.",
+        rationale: "Maintains application availability even during provider degradation."
       }
     ],
     remediation: "Clarified stub provider modes vs live endpoints; verified memory efficiency during high-throughput token buffering.",
-    results: "Successfully routes requests with <10ms gateway overhead; seamless automated fallback switchover validated under simulated provider 500 errors.",
+    results: "Successfully routes LLM requests with policy validation and validated automated fallback failover to backup model endpoints under simulated upstream HTTP error conditions.",
     limitations: "Focuses on routing and control policies; does not host raw model weights directly.",
-    tags: ["TypeScript", "API Gateway", "LLMOps", "Resilience", "Policy Enforcement"]
+    tags: ["TypeScript", "API Gateway", "LLMOps", "Resilience", "Policy Enforcement"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/ai-control-plane-demo" },
+      { label: "Gateway Routing & Policy Architecture", url: "https://github.com/SumitDalavi/ai-control-plane-demo#architecture" },
+      { label: "Failover Simulation Test Suite", url: "https://github.com/SumitDalavi/ai-control-plane-demo/tree/main" }
+    ]
   },
   {
     rank: 11,
@@ -383,6 +448,7 @@ export const caseStudies = [
     title: "NHI Agent Access Governance",
     tier: "Tier 2: Advanced Systems & AI-Infra",
     category: "Security & DevSecOps",
+    categoryId: "security",
     executiveSummary: "Governance and auditing platform enforcing least-privilege identity boundaries for Non-Human Identities (NHIs) including service accounts, AI agents, and CI/CD bots.",
     problem: "Proliferation of autonomous AI agents, CI bots, and background microservices creates unmanaged Non-Human Identities with broad, unrotated API tokens and zero runtime auditability.",
     architecture: "Identity broker leveraging workload identity federation (OIDC / SPIFFE), ephemeral scoped tokens with maximum 15-minute TTLs, and append-only cryptographic audit logs.",
@@ -406,9 +472,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Unified SPIFFE/OIDC token verification schemas; established tamper-resistant audit record formatting.",
-    results: "Validated 100% token expiration enforcement and comprehensive audit trail generation across simulated agent workflow suites.",
+    results: "Validated token expiration enforcement and audit trail generation across simulated agent workflow suites.",
     limitations: "Implementation demonstrates policy evaluation and token exchange; integration with enterprise Active Directory / Okta requires custom identity provider mapping.",
-    tags: ["IAM", "Security", "Workload Identity", "SPIFFE", "Governance", "DevSecOps"]
+    tags: ["IAM", "Security", "Workload Identity", "SPIFFE", "Governance", "DevSecOps"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/nhi-agent-access-governance" },
+      { label: "Identity Governance Architecture Spec", url: "https://github.com/SumitDalavi/nhi-agent-access-governance#architecture" },
+      { label: "Token Exchange & Audit Test Suite", url: "https://github.com/SumitDalavi/nhi-agent-access-governance/tree/main" }
+    ]
   },
   {
     rank: 12,
@@ -417,6 +488,7 @@ export const caseStudies = [
     title: "Supply Chain Security Pipeline",
     tier: "Tier 3: Production Delivery & Security",
     category: "Security & DevSecOps",
+    categoryId: "security",
     executiveSummary: "End-to-end SLSA-aligned software supply chain security pipeline featuring automated SBOM generation, vulnerability scanning, and cryptographic container image signing with Cosign.",
     problem: "Modern container deployments are vulnerable to dependency tampering, unauthorized base image modifications, and unvetted third-party CVEs introduced during build time.",
     architecture: "GitHub Actions CI pipeline that generates CycloneDX/SPDX SBOMs using Syft, scans dependencies with Grype/Trivy, signs images with Cosign keyless OIDC, and produces in-toto provenance attestations.",
@@ -441,9 +513,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Configured vulnerability threshold gates to block build pipelines on CRITICAL CVEs with zero false-positive overrides.",
-    results: "100% of published container images cryptographically signed with verifiable provenance and zero unverified images admitted to staging clusters.",
+    results: "Successfully signed container images with verifiable provenance attestations and validated signature verification in downstream admission checks.",
     limitations: "Attestation applies to build-time artifacts; runtime memory injection protection requires host-level eBPF monitoring.",
-    tags: ["DevSecOps", "Cosign", "SLSA", "SBOM", "CI/CD", "Security"]
+    tags: ["DevSecOps", "Cosign", "SLSA", "SBOM", "CI/CD", "Security"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/supply-chain-security-pipeline" },
+      { label: "SLSA Pipeline Architecture Spec", url: "https://github.com/SumitDalavi/supply-chain-security-pipeline#architecture" },
+      { label: "Provenance & Verification Workflow", url: "https://github.com/SumitDalavi/supply-chain-security-pipeline/tree/main" }
+    ]
   },
   {
     rank: 13,
@@ -452,6 +529,7 @@ export const caseStudies = [
     title: "Multi-Cluster GitOps Promotion",
     tier: "Tier 3: Production Delivery & Security",
     category: "Cloud & GitOps",
+    categoryId: "cloud",
     executiveSummary: "Multi-environment GitOps deployment architecture managing automated, auditable application promotion across development, staging, and production Kubernetes clusters.",
     problem: "Promoting application releases across heterogeneous clusters via manual commits or ad-hoc scripts causes environment drift, configuration divergence, and untracked production changes.",
     architecture: "Repository-driven GitOps structure using Kustomize overlays and ArgoCD ApplicationSets to automate pull-request-driven promotion pipelines with automated smoke testing gates.",
@@ -474,9 +552,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Prevented synchronization drift by integrating automated dry-run validation in PR checks before merges.",
-    results: "Zero configuration drift across 3 simulated cluster environments with fully auditable Git commit history for all production changes.",
+    results: "Validated consistent configuration promotion across 3 simulated cluster environments with fully auditable Git commit history.",
     limitations: "Manages stateless and stateful Kubernetes deployments; database schema migrations require external migration operators.",
-    tags: ["GitOps", "ArgoCD", "Kubernetes", "Kustomize", "Platform Engineering"]
+    tags: ["GitOps", "ArgoCD", "Kubernetes", "Kustomize", "Platform Engineering"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/multi-cluster-gitops-promotion" },
+      { label: "Promotion Flow & Kustomize Spec", url: "https://github.com/SumitDalavi/multi-cluster-gitops-promotion#architecture" },
+      { label: "ArgoCD ApplicationSet Manifests", url: "https://github.com/SumitDalavi/multi-cluster-gitops-promotion/tree/main" }
+    ]
   },
   {
     rank: 14,
@@ -485,6 +568,7 @@ export const caseStudies = [
     title: "GitOps Progressive Delivery",
     tier: "Tier 3: Production Delivery & Security",
     category: "Cloud & GitOps",
+    categoryId: "cloud",
     executiveSummary: "Progressive delivery framework automating canary and blue-green rollouts on Kubernetes with automated metric analysis and instant rollback capabilities.",
     problem: "All-at-once deployments risk blasting defective code to 100% of user traffic before observability systems can trigger manual intervention.",
     architecture: "Integrated delivery pipeline combining Argo Rollouts/Flagger, service mesh traffic splitting, and automated Prometheus analysis templates evaluating p99 latency and HTTP error rates.",
@@ -506,14 +590,19 @@ export const caseStudies = [
     decisions: [
       {
         title: "Metric-Driven Automated Rollback",
-        decision: "Configured automated rollback thresholds that immediately abort deployments if error rate exceeds 0.5% during any 1-minute analysis window.",
+        decision: "Configured automated rollback thresholds that abort deployments if error rate spikes during analysis windows.",
         rationale: "Protects production user traffic without requiring human on-call engineer intervention."
       }
     ],
     remediation: "Calibrated metric analysis step windows to avoid false positives during container initial startup spikes.",
-    results: "Demonstrated automated detection and rollback of injected synthetic defects within 45 seconds of canary traffic introduction.",
+    results: "Demonstrated automated detection and rollback of injected synthetic defects during canary traffic progression.",
     limitations: "Relies on statistically significant traffic volumes; low-traffic endpoints require synthetic traffic generator integration during canaries.",
-    tags: ["Kubernetes", "Progressive Delivery", "Argo Rollouts", "Prometheus", "SRE"]
+    tags: ["Kubernetes", "Progressive Delivery", "Argo Rollouts", "Prometheus", "SRE"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/gitops-progressive-delivery" },
+      { label: "Canary Analysis & Rollout Spec", url: "https://github.com/SumitDalavi/gitops-progressive-delivery#architecture" },
+      { label: "Argo Rollouts Analysis Templates", url: "https://github.com/SumitDalavi/gitops-progressive-delivery/tree/main" }
+    ]
   },
   {
     rank: 15,
@@ -522,6 +611,7 @@ export const caseStudies = [
     title: "Cloud-Native Secrets & Workload Identity",
     tier: "Tier 3: Production Delivery & Security",
     category: "Security & DevSecOps",
+    categoryId: "security",
     executiveSummary: "Enterprise secrets synchronization and workload identity architecture integrating Kubernetes with Azure Key Vault, HashiCorp Vault, and External Secrets Operator (ESO).",
     problem: "Storing static credentials in Kubernetes Secrets without centralized rotation or relying on long-lived cloud service principal keys exposes systems to credential theft and audit failure.",
     architecture: "Workload Identity Federation enabling Kubernetes pods to authenticate directly to Azure Key Vault and HashiCorp Vault via short-lived JWTs, synchronized dynamically via External Secrets Operator.",
@@ -546,9 +636,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Clarified Azure Key Vault vs HashiCorp Vault integration boundaries; verified clean failover when secret store endpoints experienced transient network errors.",
-    results: "Completely eliminated static passwords from Kubernetes deployment manifests across all test environments.",
+    results: "Eliminated static passwords from Kubernetes deployment manifests across all test environments.",
     limitations: "Demonstration covers Azure Key Vault and HashiCorp Vault patterns; AWS Secrets Manager requires corresponding IAM Roles for Service Accounts (IRSA) configuration.",
-    tags: ["Security", "Azure Key Vault", "HashiCorp Vault", "Kubernetes", "DevSecOps"]
+    tags: ["Security", "Azure Key Vault", "HashiCorp Vault", "Kubernetes", "DevSecOps"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/cloud-native-secrets-identity" },
+      { label: "Workload Identity Federation Spec", url: "https://github.com/SumitDalavi/cloud-native-secrets-identity#architecture" },
+      { label: "ExternalSecret Synchronization Manifests", url: "https://github.com/SumitDalavi/cloud-native-secrets-identity/tree/main" }
+    ]
   },
   {
     rank: 16,
@@ -557,6 +652,7 @@ export const caseStudies = [
     title: "OpenTelemetry Observability Pipeline",
     tier: "Tier 3: Production Delivery & Security",
     category: "Reliability & SRE",
+    categoryId: "sre",
     executiveSummary: "Standardized distributed tracing, metrics, and log correlation pipeline across microservices using the OpenTelemetry SDK and OpenTelemetry Collector.",
     problem: "Debugging performance regressions across distributed microservice topologies is impossible when telemetry formats are inconsistent and traces cannot correlate to specific logs.",
     architecture: "Polyglot microservices instrumented with OpenTelemetry SDKs exporting via OTLP (gRPC) to an OpenTelemetry Collector gateway routing to Jaeger, Prometheus, and central logging backends.",
@@ -584,9 +680,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Standardized trace context propagation across asynchronous background jobs; verified trace-to-log correlation IDs.",
-    results: "Achieved 100% end-to-end trace propagation across synchronous and asynchronous HTTP/gRPC boundaries with <2% CPU overhead.",
+    results: "Achieved end-to-end trace propagation across synchronous and asynchronous HTTP/gRPC boundaries with low CPU overhead.",
     limitations: "Demonstrated with local Jaeger and Prometheus backends; enterprise production deployment requires scalable storage backends (e.g. Tempo / Datadog / Dynatrace).",
-    tags: ["OpenTelemetry", "Distributed Tracing", "Observability", "Prometheus", "SRE"]
+    tags: ["OpenTelemetry", "Distributed Tracing", "Observability", "Prometheus", "SRE"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/opentelemetry-microservice-demo" },
+      { label: "Telemetry Pipeline Architecture", url: "https://github.com/SumitDalavi/opentelemetry-microservice-demo#architecture" },
+      { label: "OTel Collector Config & Test Suite", url: "https://github.com/SumitDalavi/opentelemetry-microservice-demo/tree/main" }
+    ]
   },
   {
     rank: 17,
@@ -595,7 +696,8 @@ export const caseStudies = [
     title: "Semantic LLM Cache",
     tier: "Tier 3: Production Delivery & Security",
     category: "AI Infrastructure",
-    executiveSummary: "High-performance semantic vector caching proxy that intercepts LLM requests, evaluates semantic similarity via vector embeddings, and returns cached responses to drastically slash API costs and latency.",
+    categoryId: "ai",
+    executiveSummary: "High-performance semantic vector caching proxy that intercepts LLM requests, evaluates semantic similarity via vector embeddings, and returns cached responses to reduce API costs and latency.",
     problem: "Standard exact-match caching fails for LLM workloads because users ask functionally identical queries with slight phrasing differences, leading to redundant expensive model calls.",
     architecture: "TypeScript proxy using OpenAI/HuggingFace embeddings and Redis Vector Similarity Search (VSS) to calculate cosine similarity against previously resolved queries with configurable confidence thresholds.",
     diagram: `[User Prompt] ---> [Semantic Caching Proxy]
@@ -612,7 +714,7 @@ export const caseStudies = [
      [Similarity >= Threshold (0.92)]    [Similarity < Threshold]
                  |                         |
                  v                         v
-     [Instant Cache Hit (p95 < 15ms)]   [Forward to Upstream LLM Provider]
+     [Instant Cache Hit]                 [Forward to Upstream LLM Provider]
                                            |
                                            v
                                         [Async Store in Vector Cache]`,
@@ -624,9 +726,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Added connection pooling for high-concurrency Redis VSS lookups; verified graceful bypass when vector cache is initializing.",
-    results: "Delivered 30-60% simulated API cost reduction on repetitive query workloads with p95 response times dropping from 1200ms to <18ms on cache hits.",
+    results: "Demonstrated effective cache hit retrieval on semantically equivalent queries, bypassing upstream model calls with local vector store lookups.",
     limitations: "Optimal for read-heavy informational queries; real-time conversational contexts with dynamic variables require cache bypass tags.",
-    tags: ["TypeScript", "Vector Search", "Redis", "LLMOps", "Performance", "Caching"]
+    tags: ["TypeScript", "Vector Search", "Redis", "LLMOps", "Performance", "Caching"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/semantic-llm-cache" },
+      { label: "Vector Caching Architecture Spec", url: "https://github.com/SumitDalavi/semantic-llm-cache#architecture" },
+      { label: "Similarity Benchmark Test Suite", url: "https://github.com/SumitDalavi/semantic-llm-cache/tree/main" }
+    ]
   },
   {
     rank: 18,
@@ -635,8 +742,9 @@ export const caseStudies = [
     title: "Secret Sprawl Remediation Bot",
     tier: "Tier 4: Foundational & Archival Lab",
     category: "Security & DevSecOps",
+    categoryId: "security",
     executiveSummary: "Archival security research prototype scanning git history for exposed credentials, triggering automated vault revocation, and opening guided remediation pull requests.",
-    problem: "Developers inadvertently committing API keys or cloud credentials to git repositories create immediate critical security vulnerabilities that require fast, error-free rotation.",
+    problem: "Developers inadvertently committing API keys or cloud credentials to git repositories create immediate security vulnerabilities that require fast, error-free rotation.",
     architecture: "Git history scanner leveraging pattern heuristics and Shannon entropy analysis, connected to simulated secret store revocation webhooks and automated PR remediation generators.",
     diagram: `[Git Commit Event] ---> [Entropy & Regex Secret Scanner]
                                       |
@@ -658,9 +766,14 @@ export const caseStudies = [
       }
     ],
     remediation: "Preserved research prototype label; verified safe sandboxed revocation in mock repository fixtures.",
-    results: "Demonstrated automated secret detection, revocation webhook dispatch, and remediation branch creation in sub-5 seconds.",
+    results: "Demonstrated automated secret detection, revocation webhook dispatch, and remediation branch creation in local fixtures.",
     limitations: "Archival lab prototype; production enterprise deployment recommends integrating established commercial scanners (e.g. GitGuardian / Trufflehog) into CI.",
-    tags: ["Security", "Secret Detection", "Automation", "Archival Lab", "DevSecOps"]
+    tags: ["Security", "Secret Detection", "Automation", "Archival Lab", "DevSecOps"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/secret-sprawl-remediation-bot" },
+      { label: "Scanner Heuristics & Design Spec", url: "https://github.com/SumitDalavi/secret-sprawl-remediation-bot#architecture" },
+      { label: "Mock Repository Fixtures & Tests", url: "https://github.com/SumitDalavi/secret-sprawl-remediation-bot/tree/main" }
+    ]
   },
   {
     rank: 19,
@@ -669,7 +782,8 @@ export const caseStudies = [
     title: "Idempotent Payment Ledger",
     tier: "Tier 4: Foundational & Archival Lab",
     category: "Reliability & SRE",
-    executiveSummary: "Distributed double-entry financial ledger prototype ensuring mathematical balance and exactly-once transaction processing using cryptographic idempotency keys and transactional locking.",
+    categoryId: "sre",
+    executiveSummary: "Distributed double-entry financial ledger prototype ensuring mathematical balance and deterministic transaction processing with duplicate request suppression using cryptographic idempotency keys and transactional locking.",
     problem: "Network retries and concurrent payment requests in distributed systems risk executing duplicate transactions, causing account balance discrepancies and financial loss.",
     architecture: "Relational database ledger implementing immutable double-entry journal entries, cryptographic idempotency key hashes, and row-level locking to guarantee consistency.",
     diagram: `[Payment Request (Idempotency-Key)] ---> [Idempotency Gate (Postgres)]
@@ -700,8 +814,13 @@ export const caseStudies = [
       }
     ],
     remediation: "Preserved foundational lab status; verified transaction isolation levels under concurrent duplicate payment simulation.",
-    results: "Validated 100% duplicate prevention across 1,000 concurrent duplicate request attempts with zero balance discrepancies.",
+    results: "Validated duplicate prevention across concurrent duplicate request attempts with zero balance discrepancies in integration test runs.",
     limitations: "Foundational research prototype exploring distributed ledger invariants; does not include payment gateway banking adapters.",
-    tags: ["PostgreSQL", "Distributed Systems", "Idempotency", "FinTech", "Foundational Lab"]
+    tags: ["PostgreSQL", "Distributed Systems", "Idempotency", "FinTech", "Foundational Lab"],
+    sources: [
+      { label: "Source Code Repository", url: "https://github.com/SumitDalavi/idempotent-payment-ledger" },
+      { label: "Double-Entry Invariants Specification", url: "https://github.com/SumitDalavi/idempotent-payment-ledger#architecture" },
+      { label: "Concurrency Isolation Test Suite", url: "https://github.com/SumitDalavi/idempotent-payment-ledger/tree/main" }
+    ]
   }
 ];

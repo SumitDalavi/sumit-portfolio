@@ -75,11 +75,11 @@ func HandleAdmission(w http.ResponseWriter, r *http.Request) {
     review.Response = resp
     json.NewEncoder(w).Encode(review)
 }`,
-      takeaway: "Building admission controllers without framework overhead provides sub-15ms p99 latency guarantees, minimal memory footprint (<20MB), and absolute clarity on Kubernetes API contracts."
+      takeaway: "Building admission controllers without framework overhead provides minimal binary footprint, deterministic resource consumption, and absolute clarity on raw Kubernetes AdmissionReview API contracts."
     },
     {
-      id: "zero-downtime-secrets",
-      title: "Zero-Downtime Secret Rotation: The Dual-Credential Grace Window Pattern",
+      id: "graceful-secrets-rotation",
+      title: "Graceful Secret Rotation: The Dual-Credential Grace Window Pattern",
       category: "DevSecOps & Platform Security",
       readTime: "4 min read",
       summary: "How to rotate critical database and API credentials in Kubernetes without triggering connection pool dropouts or race conditions during rolling restarts.",
@@ -124,14 +124,14 @@ HostConfig: {
   ];
 
   return (
-    <section id="engineering-notes" className="section animate-fade-in delay-300" style={{ background: 'hsla(var(--glass-bg), 0.25)' }}>
+    <section id="engineering-notes" className="section animate-fade-in delay-300" style={{ background: 'rgba(var(--glass-rgb), 0.25)' }}>
       <div className="container">
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <h2 className="section-title" style={{ marginBottom: '0.75rem' }}>
             <span className="text-gradient">Engineering Notes</span> & Architecture ADRs
           </h2>
           <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '750px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            In-depth decision records, production invariants, and design principles synthesized from real-world Kubernetes, platform engineering, and AI infrastructure deployments.
+            In-depth decision records, architectural invariants, and design principles synthesized from Kubernetes, platform engineering, and AI infrastructure deployments.
           </p>
         </div>
 

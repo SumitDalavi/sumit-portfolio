@@ -13,7 +13,7 @@ const CareerTimeline = () => {
         "Led ThingWorx Flow's Jenkins-to-GitHub Actions CI/CD migration, authoring 8,000+ lines of automation scripts that cut deployment lead time by ~70%.",
         "Improved vulnerability remediation cycles by ~40% across Atlas Flow and ThingWorx Flow by implementing automated SAST/DAST scanning pipelines and integrated Jira triage workflows.",
         "Served as appointed Security Champion, leading proactive threat modeling, automated DR exercises, and enterprise-grade secret rotation via Azure Key Vault.",
-        "Maintained ~99.95% enterprise SaaS platform uptime via comprehensive Datadog and Prometheus observability and strict SLO enforcement."
+        "Contributed to ~99.95% enterprise SaaS platform uptime via comprehensive Datadog and Prometheus observability and strict SLO enforcement."
       ],
       skills: ["Kubernetes", "DevSecOps", "GitHub Actions", "GitLab CI", "Azure Key Vault", "Security Champion", "Prometheus", "Datadog", "SRE"]
     },
@@ -38,7 +38,7 @@ const CareerTimeline = () => {
       summary: "Contributed to the Marchex Audio Redaction and Intent Finder platform using Node.js/TypeScript, Kafka, and containerized microservices. Supported selective cloud-cost optimization, delivery automation, and follow-the-sun production support.",
       highlights: [
         "Engineered streaming event pipelines and microservices for the Marchex Audio Redaction and Intent Finder platform using Node.js/TypeScript and Apache Kafka.",
-        "Drove cloud infrastructure cost-optimization by architecting selective data migrations from durable message queues to high-performance in-memory datastores for non-critical flows.",
+        "Supported selective cloud-infrastructure cost-optimization efforts, assisting with data tiering from durable message queues to in-memory datastores for non-critical flows.",
         "Automated container build delivery workflows and provided follow-the-sun production support for mission-critical client deployments."
       ],
       skills: ["Node.js", "TypeScript", "Apache Kafka", "Docker", "AWS", "Cost Optimization"]
@@ -77,7 +77,7 @@ const CareerTimeline = () => {
             <span className="text-gradient">Professional Career</span> & Leadership Timeline
           </h2>
           <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '750px', margin: '0 auto', fontSize: '1.05rem', lineHeight: '1.6' }}>
-            A verified 10-year progression starting in January 2017 spanning core backend systems, distributed cloud platforms, and Technical Leadership in DevSecOps and Kubernetes.
+            A verified 9.5+ year progression starting in January 2017 spanning core backend systems, distributed cloud platforms, and Technical Leadership in DevSecOps and Kubernetes.
           </p>
         </div>
 

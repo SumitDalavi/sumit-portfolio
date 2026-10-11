@@ -1,23 +1,110 @@
-import React, { useEffect } from 'react';
-import { X, ExternalLink, Shield, Cpu, CheckCircle2, AlertTriangle, Layers, GitBranch, ArrowRight } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { X, ExternalLink, Shield, Cpu, CheckCircle2, AlertTriangle, Layers, GitBranch, ArrowRight, Share2, Check, FileText } from 'lucide-react';
 
 const CaseStudyModal = ({ caseStudy, onClose }) => {
+  const modalRef = useRef(null);
+  const closeBtnRef = useRef(null);
+  const originElementRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
+    // 1. Capture the element that opened the dialog to restore focus on close
+    originElementRef.current = document.activeElement;
+
+    // 2. Make background content inert and aria-hidden
+    const mainContent = document.getElementById('main-content');
+    const header = document.querySelector('header');
+    const footer = document.querySelector('footer');
+
+    if (mainContent) {
+      mainContent.setAttribute('aria-hidden', 'true');
+      mainContent.setAttribute('inert', '');
+    }
+    if (header) {
+      header.setAttribute('aria-hidden', 'true');
+      header.setAttribute('inert', '');
+    }
+    if (footer) {
+      footer.setAttribute('aria-hidden', 'true');
+      footer.setAttribute('inert', '');
+    }
+
+    // 3. Move keyboard focus into the modal
+    if (closeBtnRef.current) {
+      closeBtnRef.current.focus();
+    }
+
+    // 4. Keyboard trap for Tab / Shift+Tab and Escape handling
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        if (!modalRef.current) return;
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
       }
     };
+
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
+
+      // Restore accessibility attributes to background content
+      if (mainContent) {
+        mainContent.removeAttribute('aria-hidden');
+        mainContent.removeAttribute('inert');
+      }
+      if (header) {
+        header.removeAttribute('aria-hidden');
+        header.removeAttribute('inert');
+      }
+      if (footer) {
+        footer.removeAttribute('aria-hidden');
+        footer.removeAttribute('inert');
+      }
+
+      // Restore focus to original button
+      if (originElementRef.current && typeof originElementRef.current.focus === 'function') {
+        originElementRef.current.focus();
+      }
     };
   }, [onClose]);
 
   if (!caseStudy) return null;
+
+  const handleCopyLink = () => {
+    const studyUrl = `https://sumit-dalavi.is-a.dev/#study-${caseStudy.id}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(studyUrl).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      });
+    }
+  };
 
   return (
     <div 
@@ -28,6 +115,7 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
       aria-labelledby="case-study-title"
     >
       <div 
+        ref={modalRef}
         className="modal-container glass-panel" 
         onClick={(e) => e.stopPropagation()}
       >
@@ -50,9 +138,10 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
               <span className="text-gradient">{caseStudy.title}</span>
             </h2>
             <button 
+              ref={closeBtnRef}
               onClick={onClose}
               className="modal-close-btn"
-              aria-label="Close case study"
+              aria-label="Close case study dialog"
             >
               <X size={22} />
             </button>
@@ -74,6 +163,15 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
               View Source Repository on GitHub
               <ExternalLink size={14} />
             </a>
+            <button
+              onClick={handleCopyLink}
+              className="btn btn-outline"
+              style={{ padding: '0.5rem 1.25rem', fontSize: '0.9rem' }}
+              aria-label="Copy shareable link to this case study"
+            >
+              {copied ? <Check size={16} style={{ color: '#10b981' }} /> : <Share2 size={16} />}
+              {copied ? 'Link Copied!' : 'Copy Shareable Link'}
+            </button>
           </div>
         </div>
 
@@ -154,6 +252,44 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
               </p>
             </div>
           </section>
+
+          {/* Sources and Recorded Evidence */}
+          {caseStudy.sources && caseStudy.sources.length > 0 && (
+            <section className="modal-section">
+              <h3 className="modal-section-title">
+                <FileText size={20} className="text-gradient" />
+                Sources & Recorded Evidence
+              </h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.75rem' }}>
+                {caseStudy.sources.map((src, sIdx) => (
+                  <a
+                    key={sIdx}
+                    href={src.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass-panel"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.85rem 1.15rem',
+                      textDecoration: 'none',
+                      color: 'hsl(var(--text-primary))',
+                      fontSize: '0.9rem',
+                      border: '1px solid var(--glass-border)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <GitBranch size={15} style={{ color: 'hsl(var(--accent-primary))' }} />
+                      <strong>{src.label}</strong>
+                    </span>
+                    <ExternalLink size={14} style={{ color: 'hsl(var(--text-secondary))' }} />
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Scope Boundaries & Limitations */}
           <section className="modal-section">

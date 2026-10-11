@@ -6,14 +6,14 @@ const Hero = () => {
     <section className="section animate-fade-in" style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', position: 'relative' }}>
       <div className="container">
         <div className="glass-panel" style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
-          <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>
+          <h1 style={{ fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)', lineHeight: 1.15, marginBottom: '1rem' }}>
             Hi, I'm <span className="text-gradient">Sumit Dalavi</span>
           </h1>
-          <h2 style={{ fontSize: '1.5rem', color: 'hsl(var(--text-secondary))', marginBottom: '2rem', fontWeight: 400 }}>
+          <h2 style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.45rem)', color: 'hsl(var(--text-secondary))', marginBottom: '2rem', fontWeight: 400, lineHeight: 1.4 }}>
             Technical Lead | Senior DevOps / Platform Engineer | DevSecOps
           </h2>
           <p style={{ fontSize: '1.125rem', marginBottom: '1.5rem', lineHeight: '1.8' }}>
-            With over <strong>10 years of experience</strong> spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
+            With <strong>9.5+ years of engineering experience</strong> spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
           </p>
           <p style={{ fontSize: '1.05rem', color: 'hsl(var(--text-secondary))', marginBottom: '2.5rem', lineHeight: '1.8' }}>
             As a <strong>Security Champion</strong> and advocate for <strong>AI-Assisted Engineering</strong>, I have a proven track record of cutting deployment lead times by ~70% and improving vulnerability remediation cycles by ~40% for enterprise SaaS platforms at scale.
