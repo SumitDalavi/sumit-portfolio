@@ -10,10 +10,10 @@ const CareerTimeline = () => {
       badge: "Current Role",
       summary: "Backend, cloud, and platform engineering across Atlas Flow and ThingWorx Flow. Led ThingWorx Flow's Jenkins-to-GitHub Actions migration; contributed to Atlas Flow's GitLab CI automation; served as Security Champion and supported observability, release governance, and engineering mentorship.",
       highlights: [
-        "Led ThingWorx Flow's Jenkins-to-GitHub Actions CI/CD migration, authoring 8,000+ lines of automation scripts that cut deployment lead time by ~70%.",
-        "Improved vulnerability remediation cycles by ~40% across Atlas Flow and ThingWorx Flow by implementing automated SAST/DAST scanning pipelines and integrated Jira triage workflows.",
-        "Served as appointed Security Champion, leading proactive threat modeling, automated DR exercises, and enterprise-grade secret rotation via Azure Key Vault.",
-        "Contributed to ~99.95% enterprise SaaS platform uptime via comprehensive Datadog and Prometheus observability and strict SLO enforcement."
+        "Led ThingWorx Flow's Jenkins-to-GitHub Actions CI/CD migration, authoring automation scripts that contributed to reducing deployment lead time by ~70%.",
+        "Contributed to accelerating vulnerability remediation cycles by ~40% across Atlas Flow and ThingWorx Flow by implementing automated SAST/DAST scanning pipelines and integrated Jira triage workflows.",
+        "Served as appointed Security Champion, leading proactive threat modeling, automated DR exercises, and automated secret rotation workflows via Azure Key Vault.",
+        "Contributed to maintaining ~99.95% SaaS platform uptime through proactive Datadog and Prometheus monitoring, alerting thresholds, and SLO tracking."
       ],
       skills: ["Kubernetes", "DevSecOps", "GitHub Actions", "GitLab CI", "Azure Key Vault", "Security Champion", "Prometheus", "Datadog", "SRE"]
     },

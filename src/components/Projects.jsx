@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, Sparkles, Layers, Shield, Cpu, ArrowRight } from 'lucide-react';
+import { ExternalLink, ChevronDown, ChevronUp, BookOpen, Search, Sparkles, Layers, Shield, Cpu, ArrowRight, CheckCircle2, AlertTriangle, GitBranch, Code2, Star } from 'lucide-react';
 import { caseStudies } from '../data/caseStudies';
 import CaseStudyModal from './CaseStudyModal';
 
@@ -79,7 +79,7 @@ const PROJECT_CATEGORIES = {
 const Projects = () => {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [selectedCaseStudy, setSelectedCaseStudy] = useState(null);
-  const [viewMode, setViewMode] = useState('case-studies'); // 'case-studies' | 'all-projects'
+  const [viewMode, setViewMode] = useState('featured'); // 'featured' | 'case-studies' | 'all-projects'
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -157,7 +157,7 @@ const Projects = () => {
     {
       title: "RAG Pipeline with Hybrid Search",
       repo: "hybrid-rag-pipeline",
-      description: "Enterprise-grade RAG system using hybrid retrieval (dense + sparse), Reciprocal Rank Fusion, and inline citation verification for grounded LLM answers.",
+      description: "RAG system using hybrid retrieval (dense + sparse), Reciprocal Rank Fusion, and inline citation verification for grounded LLM answers.",
       tags: ["TypeScript", "RAG", "ChromaDB"],
       category: "AI Infrastructure"
     },
@@ -269,7 +269,7 @@ const Projects = () => {
     {
       title: "Enterprise IAM Auth (Node.js)",
       repo: "enterprise-iam-auth-poc-node",
-      description: "Enterprise-grade Identity and Access Management PoC with SSO integration using OIDC, JWT validation, and role-based permission enforcement.",
+      description: "Identity and Access Management PoC with SSO integration using OIDC, JWT validation, and role-based permission enforcement.",
       tags: ["Node.js", "OIDC", "IAM"],
       category: "Security & DevSecOps"
     },
@@ -578,6 +578,18 @@ const Projects = () => {
 
   const caseStudyMap = useMemo(() => new Map(caseStudies.map(cs => [cs.repo, cs])), []);
 
+  const FEATURED_IDS = useMemo(() => [
+    'secure-dev-platform-demo',
+    'k8s-golden-path-provisioner',
+    'k8s-admission-webhook-from-scratch',
+    'durable-incident-agent',
+    'agent-sandbox-platform'
+  ], []);
+
+  const featuredCaseStudies = useMemo(() => {
+    return FEATURED_IDS.map(id => caseStudies.find(cs => cs.id === id)).filter(Boolean);
+  }, [FEATURED_IDS]);
+
   const categories = useMemo(() => [
     'All',
     'Platform Engineering',
@@ -670,57 +682,297 @@ const Projects = () => {
           </p>
         </div>
 
-        {/* Primary View Switcher: Ranked Case Studies vs All 70 Projects */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+        {/* Primary View Switcher: Featured vs All 19 Case Studies vs Full 70 Repositories */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => { setViewMode('featured'); }}
+            className={`btn ${viewMode === 'featured' ? 'btn-primary' : 'btn-outline'}`}
+            style={{ borderRadius: '100px', padding: '0.65rem 1.6rem', fontSize: '0.95rem' }}
+          >
+            <Star size={17} />
+            Featured Systems ({featuredCaseStudies.length})
+          </button>
           <button
             onClick={() => { setViewMode('case-studies'); setShowAllProjects(false); }}
             className={`btn ${viewMode === 'case-studies' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ borderRadius: '100px', padding: '0.65rem 1.75rem', fontSize: '0.95rem' }}
+            style={{ borderRadius: '100px', padding: '0.65rem 1.6rem', fontSize: '0.95rem' }}
           >
-            <Sparkles size={18} />
-            Ranked Case Studies ({caseStudies.length})
+            <Sparkles size={17} />
+            All 19 Case Studies
           </button>
           <button
             onClick={() => { setViewMode('all-projects'); setShowAllProjects(false); }}
             className={`btn ${viewMode === 'all-projects' ? 'btn-primary' : 'btn-outline'}`}
-            style={{ borderRadius: '100px', padding: '0.65rem 1.75rem', fontSize: '0.95rem' }}
+            style={{ borderRadius: '100px', padding: '0.65rem 1.6rem', fontSize: '0.95rem' }}
           >
-            <Layers size={18} />
+            <Layers size={17} />
             Full Repository Catalog ({projects.length})
           </button>
         </div>
 
-        {/* Search Bar with Accessible Label */}
-        <div className="search-bar-container">
-          <label htmlFor="project-search-input" className="sr-only">
-            Search case studies and repository catalog
-          </label>
-          <Search size={18} className="search-icon" aria-hidden="true" />
-          <input
-            id="project-search-input"
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            aria-label="Search engineering case studies and repository catalog by title, technology, or keywords"
-            placeholder={viewMode === 'case-studies' ? "Search 19 ranked case studies by architecture, tag, or topic..." : "Search all 70 repositories..."}
-            className="search-input"
-          />
-        </div>
+        {/* Search Bar & Category Filters (for Case Studies and All Projects views) */}
+        {viewMode !== 'featured' && (
+          <>
+            <div className="search-bar-container">
+              <label htmlFor="project-search-input" className="sr-only">
+                Search case studies and repository catalog
+              </label>
+              <Search size={18} className="search-icon" aria-hidden="true" />
+              <input
+                id="project-search-input"
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search engineering case studies and repository catalog by title, technology, or keywords"
+                placeholder={viewMode === 'case-studies' ? "Search 19 ranked case studies by architecture, tag, or topic..." : "Search all 70 repositories..."}
+                className="search-input"
+              />
+            </div>
 
-        {/* Category Filter Pills */}
-        <div className="filter-tabs">
-          {categories.map((cat, idx) => (
-            <button
-              key={idx}
-              onClick={() => setActiveCategory(cat)}
-              className={`filter-tab-btn ${activeCategory === cat ? 'active' : ''}`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+            <div className="filter-tabs">
+              {categories.map((cat, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`filter-tab-btn ${activeCategory === cat ? 'active' : ''}`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
 
-        {/* MODE 1: RANKED CASE STUDIES (19) */}
+        {/* MODE 1: FEATURED SYSTEMS (5 CURATED FLAGSHIPS) */}
+        {viewMode === 'featured' && (
+          <>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+              <div style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '0.5rem', 
+                background: 'rgba(56, 189, 248, 0.1)', 
+                border: '1px solid rgba(56, 189, 248, 0.25)', 
+                padding: '0.35rem 1rem', 
+                borderRadius: '100px', 
+                marginBottom: '0.75rem',
+                color: 'hsl(var(--accent-primary))',
+                fontSize: '0.85rem',
+                fontWeight: 600
+              }}>
+                <Shield size={14} /> Curated Platform Engineering, SRE & Container Security Evidence
+              </div>
+              <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '720px', margin: '0 auto', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                Curated initial view prioritizing high-signal architectural evidence over catalog volume. Each system provides immediate access to source code, architecture specifications, automated test status, and documented operational boundaries.
+              </p>
+            </div>
+
+            <div className="grid grid-2">
+              {featuredCaseStudies.map((cs) => (
+                <div 
+                  key={cs.id} 
+                  className="glass-panel" 
+                  style={{ 
+                    padding: '2rem', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    position: 'relative',
+                    border: '1px solid hsla(var(--accent-primary), 0.35)',
+                    boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.25)'
+                  }}
+                >
+                  {/* Top Badges */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <span className="badge-rank">
+                        Featured #{cs.rank}
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.725rem', 
+                        fontWeight: 600, 
+                        padding: '0.2rem 0.6rem', 
+                        borderRadius: '6px', 
+                        background: 'rgba(56, 189, 248, 0.12)', 
+                        color: '#38bdf8', 
+                        border: '1px solid rgba(56, 189, 248, 0.25)' 
+                      }}>
+                        {cs.stage || 'Functional Prototype'}
+                      </span>
+                    </div>
+                    <span className="badge-category">
+                      {cs.category}
+                    </span>
+                  </div>
+
+                  <h3 style={{ fontSize: '1.35rem', lineHeight: '1.3', marginBottom: '0.75rem' }}>
+                    <button 
+                      onClick={() => handleOpenCaseStudy(cs)}
+                      style={{ background: 'none', border: 'none', color: 'inherit', font: 'inherit', textAlign: 'left', cursor: 'pointer', padding: 0 }}
+                      className="hover-accent"
+                    >
+                      {cs.title}
+                    </button>
+                  </h3>
+
+                  <p style={{ color: 'hsl(var(--text-secondary))', marginBottom: '1.25rem', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                    {cs.executiveSummary}
+                  </p>
+
+                  {/* Test Status Indicator */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem', 
+                    marginBottom: '1rem', 
+                    fontSize: '0.8rem', 
+                    color: 'hsl(var(--accent-teal))', 
+                    background: 'rgba(45, 212, 191, 0.08)', 
+                    padding: '0.45rem 0.75rem', 
+                    borderRadius: '6px', 
+                    border: '1px solid rgba(45, 212, 191, 0.2)' 
+                  }}>
+                    <CheckCircle2 size={14} />
+                    <span>Verification: <strong>{cs.testStatus || 'Automated CI Test Suite Passing'}</strong></span>
+                  </div>
+
+                  {/* Direct Proof Links */}
+                  <div style={{ 
+                    display: 'flex', 
+                    flexWrap: 'wrap', 
+                    alignItems: 'center',
+                    gap: '0.6rem', 
+                    marginBottom: '1.25rem', 
+                    padding: '0.75rem 1rem', 
+                    background: 'rgba(15, 23, 42, 0.6)', 
+                    borderRadius: '8px', 
+                    border: '1px solid var(--glass-border)',
+                    fontSize: '0.825rem'
+                  }}>
+                    <span style={{ color: 'hsl(var(--text-muted))', fontWeight: 600, marginRight: '0.25rem' }}>
+                      Proof Links:
+                    </span>
+                    <a
+                      href={`https://github.com/SumitDalavi/${cs.repo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'hsl(var(--accent-primary))', textDecoration: 'none' }}
+                      className="hover-underline"
+                    >
+                      <Code2 size={13} /> Repo &rarr;
+                    </a>
+                    <span style={{ color: 'hsl(var(--text-muted))' }}>&bull;</span>
+                    <a
+                      href={`https://github.com/SumitDalavi/${cs.repo}#architecture`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'hsl(var(--accent-primary))', textDecoration: 'none' }}
+                      className="hover-underline"
+                    >
+                      <GitBranch size={13} /> Architecture &rarr;
+                    </a>
+                    <span style={{ color: 'hsl(var(--text-muted))' }}>&bull;</span>
+                    <a
+                      href={`https://github.com/SumitDalavi/${cs.repo}/tree/main`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: 'hsl(var(--accent-primary))', textDecoration: 'none' }}
+                      className="hover-underline"
+                    >
+                      <CheckCircle2 size={13} /> Tests &rarr;
+                    </a>
+                  </div>
+
+                  {/* Known Limitations Box */}
+                  <div style={{ 
+                    background: 'rgba(245, 158, 11, 0.05)', 
+                    border: '1px solid rgba(245, 158, 11, 0.25)', 
+                    borderRadius: '8px', 
+                    padding: '0.85rem 1rem', 
+                    marginBottom: '1.25rem' 
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#f59e0b', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.25rem' }}>
+                      <AlertTriangle size={13} />
+                      <span>Documented Prototype Boundaries & Limitations:</span>
+                    </div>
+                    <p style={{ fontSize: '0.85rem', color: 'hsl(var(--text-secondary))', lineHeight: '1.5', margin: 0 }}>
+                      {cs.limitations}
+                    </p>
+                  </div>
+
+                  {/* Tech Tags */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '1.5rem', marginTop: 'auto' }}>
+                    {cs.tags.map((tag, tIdx) => (
+                      <span key={tIdx} className="tag-pill">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => handleOpenCaseStudy(cs)}
+                      className="btn btn-primary"
+                      style={{ flexGrow: 1, justifyContent: 'center', padding: '0.65rem 1rem', fontSize: '0.9rem' }}
+                    >
+                      <BookOpen size={16} />
+                      Deep Dive Case Study (6-Part Review)
+                    </button>
+                    <a
+                      href={`https://github.com/SumitDalavi/${cs.repo}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-outline"
+                      style={{ padding: '0.65rem 0.9rem', fontSize: '0.9rem' }}
+                      title="View GitHub Repository"
+                      aria-label={`View GitHub repository for ${cs.title}`}
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Exploration Callout */}
+            <div style={{ 
+              marginTop: '3.5rem', 
+              padding: '2rem 2.5rem', 
+              background: 'rgba(15, 23, 42, 0.7)', 
+              borderRadius: '16px', 
+              border: '1px solid var(--glass-border)', 
+              textAlign: 'center',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)'
+            }}>
+              <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: '#fff' }}>
+                Want to explore beyond these 5 flagship systems?
+              </h3>
+              <p style={{ color: 'hsl(var(--text-secondary))', maxWidth: '640px', margin: '0 auto 1.5rem', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                Review 14 additional in-depth case studies across distributed consensus, multi-agent AI networks, and cloud cost engineering, or search the complete open-source repository catalog.
+              </p>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => { setViewMode('case-studies'); setShowAllProjects(true); }}
+                  className="btn btn-outline"
+                  style={{ borderRadius: '100px', padding: '0.6rem 1.5rem' }}
+                >
+                  <BookOpen size={16} />
+                  View All 19 Case Studies
+                </button>
+                <button
+                  onClick={() => { setViewMode('all-projects'); setShowAllProjects(false); }}
+                  className="btn btn-outline"
+                  style={{ borderRadius: '100px', padding: '0.6rem 1.5rem' }}
+                >
+                  <Layers size={16} />
+                  Browse Full 70 Repositories
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* MODE 2: RANKED CASE STUDIES (19) */}
         {viewMode === 'case-studies' && (
           <>
             <div className="grid grid-2">

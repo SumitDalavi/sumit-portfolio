@@ -9,14 +9,25 @@ const Hero = () => {
           <h1 style={{ fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)', lineHeight: 1.15, marginBottom: '1rem' }}>
             Hi, I'm <span className="text-gradient">Sumit Dalavi</span>
           </h1>
-          <h2 style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.45rem)', color: 'hsl(var(--text-secondary))', marginBottom: '2rem', fontWeight: 400, lineHeight: 1.4 }}>
-            Technical Lead | Senior DevOps / Platform Engineer | DevSecOps
+          <h2 style={{ fontSize: 'clamp(1.2rem, 2.8vw, 1.65rem)', color: 'hsl(var(--text-primary))', marginBottom: '1rem', fontWeight: 600, lineHeight: 1.4 }}>
+            Senior Platform Engineer building secure, reliable Kubernetes platforms and developer workflows.
           </h2>
+          <div style={{ display: 'flex', gap: '0.6rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <span style={{ background: 'hsla(var(--accent-primary), 0.12)', color: 'hsl(var(--accent-primary))', border: '1px solid hsla(var(--accent-primary), 0.3)', padding: '0.35rem 0.85rem', borderRadius: '100px', fontSize: '0.875rem', fontWeight: 500 }}>
+              DevSecOps
+            </span>
+            <span style={{ background: 'hsla(var(--accent-primary), 0.12)', color: 'hsl(var(--accent-primary))', border: '1px solid hsla(var(--accent-primary), 0.3)', padding: '0.35rem 0.85rem', borderRadius: '100px', fontSize: '0.875rem', fontWeight: 500 }}>
+              SRE & Observability
+            </span>
+            <span style={{ background: 'hsla(var(--accent-primary), 0.12)', color: 'hsl(var(--accent-primary))', border: '1px solid hsla(var(--accent-primary), 0.3)', padding: '0.35rem 0.85rem', borderRadius: '100px', fontSize: '0.875rem', fontWeight: 500 }}>
+              Cloud Infrastructure
+            </span>
+          </div>
           <p style={{ fontSize: '1.125rem', marginBottom: '1.5rem', lineHeight: '1.8' }}>
-            With <strong>10 years of engineering experience</strong> spanning backend engineering, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
+            With <strong>10 years of engineering experience</strong> spanning backend systems, cloud infrastructure, CI/CD, GitOps, DevSecOps, and SRE. I specialize in building robust Node.js/TypeScript foundations combined with hands-on ownership of Kubernetes platforms.
           </p>
           <p style={{ fontSize: '1.05rem', color: 'hsl(var(--text-secondary))', marginBottom: '2.5rem', lineHeight: '1.8' }}>
-            As a <strong>Security Champion</strong> and advocate for <strong>AI-Assisted Engineering</strong>, I have a proven track record of cutting deployment lead times by ~70% and improving vulnerability remediation cycles by ~40% for enterprise SaaS platforms at scale.
+            As a <strong>Security Champion</strong> and advocate for <strong>AI-Assisted Engineering</strong>, I have contributed to reducing deployment lead times by ~70% and accelerating vulnerability remediation cycles by ~40% for cloud-native platforms.
           </p>
           
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>

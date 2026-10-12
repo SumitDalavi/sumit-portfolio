@@ -49,7 +49,7 @@ const Navbar = () => {
             Sumit<span className="text-gradient">.Dalavi</span>
           </span>
           <span className="badge-tier" style={{ fontSize: '0.65rem', padding: '0.15rem 0.5rem' }}>
-            Tech Lead
+            Platform Engineer
           </span>
         </a>
 

@@ -28,11 +28,11 @@ const Certifications = () => {
   ];
 
   const impacts = [
-    "Led a massive Jenkins-to-GitHub Actions CI/CD migration, authoring 8,000+ lines of automation scripts that cut deployment lead time by ~70%.",
-    "Improved vulnerability remediation cycles by ~40% by implementing automated SAST/DAST scanning pipelines and integrated Jira triage workflows.",
+    "Led ThingWorx Flow's Jenkins-to-GitHub Actions CI/CD migration, authoring automation scripts that contributed to reducing deployment lead time by ~70%.",
+    "Contributed to accelerating vulnerability remediation cycles by ~40% across Atlas Flow and ThingWorx Flow by implementing automated SAST/DAST scanning pipelines and integrated Jira triage workflows.",
     "Drove cloud infrastructure cost-optimization by architecting selective migrations from durable message queues to high-performance in-memory datastores for non-critical flows.",
-    "Led proactive security initiatives including comprehensive threat modeling, automated DR exercises, and enterprise-grade secret rotation via Azure Key Vault.",
-    "Maintained ~99.95% uptime for enterprise SaaS platforms via comprehensive Datadog and Prometheus observability and strict SLO enforcement.",
+    "Facilitated proactive security initiatives including threat modeling, disaster recovery exercises, and automated secret rotation workflows via Azure Key Vault.",
+    "Contributed to maintaining ~99.95% SaaS platform uptime through proactive Datadog and Prometheus observability, alerting thresholds, and SLO tracking.",
     "Reduced manual release effort by ~60% across the engineering organization via Docker and Rancher-driven deployment automation."
   ];
 

@@ -101,7 +101,7 @@ func HandleAdmission(w http.ResponseWriter, r *http.Request) {
       title: "Sandboxing Untrusted AI Code: Linux Cgroups, Namespaces & Network Isolation",
       category: "AI Security & Infrastructure",
       readTime: "4 min read",
-      summary: "Why prompt guardrails cannot guarantee safe execution of untrusted AI-generated code, and how Linux kernel primitives establish unbreakable execution boundaries.",
+      summary: "Why prompt guardrails cannot guarantee safe execution of untrusted AI-generated code, and how Linux kernel primitives establish deterministic, isolated execution boundaries.",
       invariants: [
         "Containers must drop all capabilities (CAP_DROP ALL) and enforce an unprivileged non-root user ID.",
         "Default network mode must be NetworkMode: none unless an authenticated proxy token is explicitly granted.",

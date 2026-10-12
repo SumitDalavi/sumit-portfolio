@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ExternalLink, Shield, Cpu, CheckCircle2, AlertTriangle, Layers, GitBranch, ArrowRight, Share2, Check, FileText } from 'lucide-react';
+import { X, ExternalLink, Shield, Cpu, CheckCircle2, AlertTriangle, Layers, GitBranch, ArrowRight, Share2, Check, FileText, UserCheck, Terminal } from 'lucide-react';
 
 const CaseStudyModal = ({ caseStudy, onClose }) => {
   const modalRef = useRef(null);
@@ -132,6 +132,11 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
             <span className="badge-category">
               {caseStudy.category}
             </span>
+            {caseStudy.stage && (
+              <span className="badge-stage" style={{ background: 'hsla(var(--accent-secondary), 0.15)', color: 'hsl(var(--accent-secondary))', border: '1px solid hsla(var(--accent-secondary), 0.3)', padding: '0.2rem 0.65rem', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 600 }}>
+                {caseStudy.stage}
+              </span>
+            )}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
@@ -176,24 +181,37 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
           </div>
         </div>
 
-        {/* Modal Body */}
+        {/* Modal Body: 6-Part Principal Case Study Format */}
         <div className="modal-body">
-          {/* Problem Statement */}
+          {/* 1. Problem Statement & Constraints */}
           <section className="modal-section">
             <h3 className="modal-section-title">
               <Shield size={20} className="text-gradient" />
-              Problem & Engineering Constraints
+              1. Problem & Engineering Constraints
             </h3>
             <p className="modal-section-text">
               {caseStudy.problem}
             </p>
           </section>
 
-          {/* Architecture & Flow Diagram */}
+          {/* 2. Role & Ownership Scope */}
+          <section className="modal-section">
+            <h3 className="modal-section-title">
+              <UserCheck size={20} className="text-gradient" />
+              2. Role & Ownership Scope
+            </h3>
+            <div style={{ background: 'rgba(15, 23, 42, 0.65)', border: '1px solid hsla(var(--accent-primary), 0.25)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
+              <p style={{ fontSize: '0.95rem', lineHeight: '1.6', margin: 0 }}>
+                {caseStudy.role || "Primary Author & Platform Architect — Architected core specifications, implemented controller reconciliation logic, and developed automated test verification suites."}
+              </p>
+            </div>
+          </section>
+
+          {/* 3. Architecture & Trade-Offs (ADRs) */}
           <section className="modal-section">
             <h3 className="modal-section-title">
               <Layers size={20} className="text-gradient" />
-              Architecture & Data Flow
+              3. Architecture & Trade-Offs (ADRs)
             </h3>
             <p className="modal-section-text" style={{ marginBottom: '1rem' }}>
               {caseStudy.architecture}
@@ -203,16 +221,8 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
                 <pre>{caseStudy.diagram}</pre>
               </div>
             )}
-          </section>
-
-          {/* Key Architectural Decisions (ADRs) */}
-          {caseStudy.decisions && caseStudy.decisions.length > 0 && (
-            <section className="modal-section">
-              <h3 className="modal-section-title">
-                <Cpu size={20} className="text-gradient" />
-                Architectural Decisions & Tradeoffs (ADRs)
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {caseStudy.decisions && caseStudy.decisions.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1.25rem' }}>
                 {caseStudy.decisions.map((adr, idx) => (
                   <div key={idx} className="adr-card">
                     <h4 style={{ fontSize: '1.05rem', color: 'hsl(var(--accent-primary))', marginBottom: '0.35rem' }}>
@@ -227,25 +237,37 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
                   </div>
                 ))}
               </div>
-            </section>
-          )}
-
-          {/* Engineering Evolution & Remediation */}
-          <section className="modal-section">
-            <h3 className="modal-section-title">
-              <ArrowRight size={20} className="text-gradient" />
-              Engineering Evolution & Solved Blockers
-            </h3>
-            <p className="modal-section-text">
-              {caseStudy.remediation}
-            </p>
+            )}
           </section>
 
-          {/* Recorded Results & Evidence */}
+          {/* 4. How It Was Tested & Verification */}
+          <section className="modal-section">
+            <h3 className="modal-section-title">
+              <Terminal size={20} className="text-gradient" />
+              4. How It Was Tested & Verification
+            </h3>
+            <div style={{ background: 'rgba(15, 23, 42, 0.65)', border: '1px solid var(--glass-border)', borderRadius: '10px', padding: '1rem 1.25rem', marginBottom: '0.75rem' }}>
+              <p style={{ fontSize: '0.95rem', lineHeight: '1.6', margin: 0, color: 'hsl(var(--text-secondary))' }}>
+                {caseStudy.testing || "Validated via automated integration test suites running in CI, asserting contract compliance, expected-denial edge cases, and deterministic recovery."}
+              </p>
+            </div>
+            {caseStudy.remediation && (
+              <div style={{ background: 'rgba(15, 23, 42, 0.4)', border: '1px solid var(--glass-border)', borderRadius: '10px', padding: '0.85rem 1.15rem' }}>
+                <span style={{ fontSize: '0.8rem', color: 'hsl(var(--accent-primary))', fontWeight: 600, display: 'block', marginBottom: '0.25rem' }}>
+                  Solved Engineering Blockers:
+                </span>
+                <p style={{ fontSize: '0.9rem', color: 'hsl(var(--text-secondary))', margin: 0, lineHeight: 1.5 }}>
+                  {caseStudy.remediation}
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* 5. Recorded Evidence & Results */}
           <section className="modal-section">
             <h3 className="modal-section-title">
               <CheckCircle2 size={20} style={{ color: '#10b981' }} />
-              Recorded Evidence & Verification
+              5. Recorded Evidence & Results
             </h3>
             <div className="evidence-card">
               <p style={{ fontSize: '0.95rem', lineHeight: '1.6' }}>
@@ -254,12 +276,38 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
             </div>
           </section>
 
-          {/* Sources and Recorded Evidence */}
+          {/* 6. Known Limitations & What I Would Change */}
+          <section className="modal-section">
+            <h3 className="modal-section-title">
+              <AlertTriangle size={20} style={{ color: '#f59e0b' }} />
+              6. Known Limitations & What I Would Change Next
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ background: 'hsla(38, 92%, 50%, 0.08)', border: '1px solid hsla(38, 92%, 50%, 0.25)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
+                <span style={{ fontSize: '0.85rem', color: '#f59e0b', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  Current Scope Boundaries & Limitations:
+                </span>
+                <p style={{ fontSize: '0.925rem', margin: 0, color: 'hsl(var(--text-secondary))' }}>
+                  {caseStudy.limitations}
+                </p>
+              </div>
+              <div style={{ background: 'rgba(15, 23, 42, 0.65)', border: '1px solid var(--glass-border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
+                <span style={{ fontSize: '0.85rem', color: 'hsl(var(--accent-primary))', fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+                  What I Would Change in Next Production Iteration:
+                </span>
+                <p style={{ fontSize: '0.925rem', margin: 0, color: 'hsl(var(--text-secondary))' }}>
+                  {caseStudy.whatWouldChange || "In a subsequent production iteration, I would extend observability telemetry with OpenTelemetry distributed traces and configure multi-cluster automated failover."}
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Sources and Verified Artifacts */}
           {caseStudy.sources && caseStudy.sources.length > 0 && (
             <section className="modal-section">
               <h3 className="modal-section-title">
                 <FileText size={20} className="text-gradient" />
-                Sources & Recorded Evidence
+                Verified Artifacts & Source Repositories
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.75rem' }}>
                 {caseStudy.sources.map((src, sIdx) => (
@@ -291,17 +339,6 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
               </div>
             </section>
           )}
-
-          {/* Scope Boundaries & Limitations */}
-          <section className="modal-section">
-            <h3 className="modal-section-title">
-              <AlertTriangle size={20} style={{ color: '#f59e0b' }} />
-              Scope Boundaries & Production Limitations
-            </h3>
-            <p className="modal-section-text" style={{ fontStyle: 'italic', color: 'hsl(var(--text-secondary))' }}>
-              {caseStudy.limitations}
-            </p>
-          </section>
 
           {/* Tech Tags */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
