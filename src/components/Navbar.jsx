@@ -18,7 +18,7 @@ const Navbar = () => {
     { label: "Career & Leadership", href: "#timeline" },
     { label: "Engineering Notes", href: "#engineering-notes" },
     { label: "Skills", href: "#skills" },
-    { label: "Certifications", href: "#experience" }
+    { label: "Certifications", href: "#certifications" }
   ];
 
   return (

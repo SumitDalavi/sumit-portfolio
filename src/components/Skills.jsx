@@ -80,7 +80,7 @@ const Skills = () => {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem' }}>
-          <a href="#projects" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer', display: 'inline-block' }} className="animate-bounce">
+          <a href="#certifications" style={{ color: 'hsl(var(--text-secondary))', cursor: 'pointer', display: 'inline-block' }} className="animate-bounce" aria-label="Continue exploring to Certifications and Impact">
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
               <span>Continue Exploring</span>
               <ChevronDown size={24} />

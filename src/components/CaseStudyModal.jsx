@@ -124,8 +124,21 @@ const CaseStudyModal = ({ caseStudy, onClose }) => {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
             <span className="badge-rank">
-              Rank #{caseStudy.rank}
+              Case Study #{caseStudy.rank}
             </span>
+            {caseStudy.rank <= 5 && (
+              <span style={{ 
+                fontSize: '0.725rem', 
+                fontWeight: 600, 
+                padding: '0.2rem 0.6rem', 
+                borderRadius: '100px', 
+                background: 'rgba(56, 189, 248, 0.15)', 
+                color: '#38bdf8', 
+                border: '1px solid rgba(56, 189, 248, 0.3)' 
+              }}>
+                Featured Flagship
+              </span>
+            )}
             <span className="badge-tier">
               {caseStudy.tier}
             </span>

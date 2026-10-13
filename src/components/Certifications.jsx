@@ -40,7 +40,8 @@ const Certifications = () => {
   const displayedImpacts = showAllImpact ? impacts : impacts.slice(0, 4);
 
   return (
-    <section id="experience" className="section animate-fade-in delay-300">
+    <section id="certifications" className="section animate-fade-in delay-300">
+      <span id="experience" style={{ display: 'none' }} />
       <div className="container">
         <h2 className="section-title">
           <span className="text-gradient">Experience</span> & Professional Development

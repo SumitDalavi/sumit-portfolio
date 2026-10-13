@@ -652,9 +652,21 @@ const Projects = () => {
     });
   }, [activeCategory, searchQuery]);
 
+  // Sort projects so all 19 Case Studies appear first in strict rank order 1..19, followed by catalog repositories
+  const sortedProjects = useMemo(() => {
+    return [...projects].sort((a, b) => {
+      const csA = caseStudyMap.get(a.repo);
+      const csB = caseStudyMap.get(b.repo);
+      if (csA && csB) return csA.rank - csB.rank;
+      if (csA && !csB) return -1;
+      if (!csA && csB) return 1;
+      return 0;
+    });
+  }, [projects, caseStudyMap]);
+
   // Filtered 70 All Projects with explicit category matching
   const filteredAllProjects = useMemo(() => {
-    return projects.filter(p => {
+    return sortedProjects.filter(p => {
       const category = getProjectCategory(p);
       const matchesCategory = activeCategory === 'All' || category === activeCategory;
       const query = searchQuery.toLowerCase().trim();
@@ -665,7 +677,7 @@ const Projects = () => {
         p.tags.some(t => t.toLowerCase().includes(query));
       return matchesCategory && matchesQuery;
     });
-  }, [projects, caseStudyMap, activeCategory, searchQuery]);
+  }, [sortedProjects, activeCategory, searchQuery]);
 
   const displayedCaseStudies = showAllProjects ? filteredCaseStudies : filteredCaseStudies.slice(0, 6);
   const displayedProjects = showAllProjects ? filteredAllProjects : filteredAllProjects.slice(0, 8);
@@ -724,7 +736,7 @@ const Projects = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 aria-label="Search engineering case studies and repository catalog by title, technology, or keywords"
-                placeholder={viewMode === 'case-studies' ? "Search 19 ranked case studies by architecture, tag, or topic..." : "Search all 70 repositories..."}
+                placeholder={viewMode === 'case-studies' ? "Search 19 case studies by architecture, tag, or topic..." : "Search all 70 repositories..."}
                 className="search-input"
               />
             </div>
@@ -785,16 +797,27 @@ const Projects = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                       <span className="badge-rank">
-                        Featured #{cs.rank}
+                        Case Study #{cs.rank}
                       </span>
                       <span style={{ 
                         fontSize: '0.725rem', 
                         fontWeight: 600, 
                         padding: '0.2rem 0.6rem', 
                         borderRadius: '6px', 
-                        background: 'rgba(56, 189, 248, 0.12)', 
+                        background: 'rgba(56, 189, 248, 0.15)', 
                         color: '#38bdf8', 
-                        border: '1px solid rgba(56, 189, 248, 0.25)' 
+                        border: '1px solid rgba(56, 189, 248, 0.3)' 
+                      }}>
+                        Featured Flagship
+                      </span>
+                      <span style={{ 
+                        fontSize: '0.725rem', 
+                        fontWeight: 600, 
+                        padding: '0.2rem 0.6rem', 
+                        borderRadius: '6px', 
+                        background: 'rgba(255, 255, 255, 0.05)', 
+                        color: 'hsl(var(--text-secondary))', 
+                        border: '1px solid var(--glass-border)' 
                       }}>
                         {cs.stage || 'Functional Prototype'}
                       </span>
@@ -972,7 +995,7 @@ const Projects = () => {
           </>
         )}
 
-        {/* MODE 2: RANKED CASE STUDIES (19) */}
+        {/* MODE 2: ALL 19 CASE STUDIES */}
         {viewMode === 'case-studies' && (
           <>
             <div className="grid grid-2">
@@ -985,15 +1008,28 @@ const Projects = () => {
                     display: 'flex', 
                     flexDirection: 'column', 
                     position: 'relative',
-                    border: cs.rank <= 4 ? '1px solid hsla(var(--accent-primary), 0.4)' : '1px solid var(--glass-border)'
+                    border: cs.rank <= 5 ? '1px solid hsla(var(--accent-primary), 0.4)' : '1px solid var(--glass-border)'
                   }}
                 >
                   {/* Top Badges */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                       <span className="badge-rank">
-                        Rank #{cs.rank}
+                        Case Study #{cs.rank}
                       </span>
+                      {cs.rank <= 5 && (
+                        <span style={{ 
+                          fontSize: '0.7rem', 
+                          fontWeight: 600, 
+                          padding: '0.15rem 0.5rem', 
+                          borderRadius: '4px', 
+                          background: 'rgba(56, 189, 248, 0.12)', 
+                          color: '#38bdf8', 
+                          border: '1px solid rgba(56, 189, 248, 0.25)' 
+                        }}>
+                          Featured
+                        </span>
+                      )}
                       <span className="badge-tier" style={{ fontSize: '0.7rem' }}>
                         {cs.tier.split(':')[0]}
                       </span>
@@ -1072,7 +1108,7 @@ const Projects = () => {
                   {showAllProjects ? (
                     <>Show Less <ChevronUp size={16} /></>
                   ) : (
-                    <>Show All {filteredCaseStudies.length} Ranked Case Studies <ChevronDown size={16} /></>
+                    <>Show All {filteredCaseStudies.length} Case Studies <ChevronDown size={16} /></>
                   )}
                 </button>
               </div>
@@ -1080,7 +1116,7 @@ const Projects = () => {
           </>
         )}
 
-        {/* MODE 2: ALL 70 PROJECTS */}
+        {/* MODE 3: ALL 70 PROJECTS */}
         {viewMode === 'all-projects' && (
           <>
             <div className="grid grid-2">
@@ -1153,7 +1189,7 @@ const Projects = () => {
                           className="btn btn-outline"
                           style={{ width: '100%', justifyContent: 'center', fontSize: '0.875rem', padding: '0.5rem' }}
                         >
-                          <BookOpen size={14} /> View Linked Case Study #{cs.rank}
+                          <BookOpen size={14} /> View Case Study #{cs.rank}
                         </button>
                       </div>
                     )}
